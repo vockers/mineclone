@@ -11,16 +11,9 @@ public:
 		float yaw = -90.0f, float pitch = 0.0f);
 	~Camera();
 
-	void update(float dt);
+	void update(float delta_time);
 
 	glm::mat4 getViewMatrix() const;
-	glm::mat4 getProjectionMatrix() const;
-
-	glm::vec3 getPosition() const;
-	glm::vec3 getDirection() const;
-
-	void setPosition(const glm::vec3& position);
-	void setDirection(const glm::vec3& direction);
 
 private:
 	glm::vec3 m_position;
@@ -34,10 +27,7 @@ private:
 
 	float m_speed;
 	float m_sensitivity;
-	float m_fov;
-	float m_aspectRatio;
-	float m_nearPlane;
-	float m_farPlane;
 
 	void updateVectors();
+	void processKeyboard(float delta_time);
 };

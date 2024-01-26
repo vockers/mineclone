@@ -1,8 +1,9 @@
 #include "Renderer.hpp"
 
+#include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
-#include <GL/glew.h>
 #include <SFML/OpenGL.hpp>
+#include <GL/glew.h>
 
 #include "Chunk.hpp"
 #include "ChunkMesh.hpp"
@@ -18,13 +19,9 @@ Renderer::Renderer(sf::Window &window) : m_window(window)
 		exit(1);
 	}
 
-	sf::Shader *chunk_shader = new sf::Shader();
-	chunk_shader->loadFromFile("res/shaders/chunk_vertex.glsl", "res/shaders/chunk_fragment.glsl");
-	m_shaders.push_back(std::unique_ptr<sf::Shader>(chunk_shader));
+	m_shaders[SHADER_CHUNK].loadFromFile("res/shaders/chunk_vertex.glsl", "res/shaders/chunk_fragment.glsl");
 
-	sf::Texture *block_texture = new sf::Texture();
-	block_texture->loadFromFile("res/textures/blocks.png");
-	m_textures.push_back(std::unique_ptr<sf::Texture>(block_texture));
+	m_textures[TEXTURE_BLOCKS].loadFromFile("res/textures/blocks.png");
 
 	chunk = new Chunk(glm::ivec2(0, 0));
 }
@@ -38,6 +35,12 @@ void Renderer::render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 	glClearColor(0.3f, 0.3f, 0.8f, 1.0f);
 
+	m_shaders[SHADER_CHUNK].bind();
+
+    glm::mat4 projection = getProjectionMatrix();
+    glm::mat4 view = m_camera.getViewMatrix();
+
+
 	// mat4_multiply(mvp, projection, view);
 	// mat4_identity(model);
 	// mat4_translate(model, (vec3_t){(float)chunk->pos.x * CHUNK_SIZE_X, 0.0f, (float)chunk->pos.y * CHUNK_SIZE_Z});
@@ -48,4 +51,14 @@ void Renderer::render()
 	chunk->getMesh()->draw();
 
 	m_window.display();
+}
+
+glm::mat4 Renderer::getProjectionMatrix() const
+{
+	return glm::perspective(
+		glm::radians(m_projection_settings.fov),
+		m_projection_settings.aspect,
+		m_projection_settings.near,
+		m_projection_settings.far
+	);
 }
