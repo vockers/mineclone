@@ -34,6 +34,9 @@ void Game::processEvents()
 		case sf::Event::Closed:
 			m_window.close();
 			break;
+		case sf::Event::Resized:
+			m_renderer.setViewPort(event.size.width, event.size.height);
+			break;
 		default:
 			break;
 		}

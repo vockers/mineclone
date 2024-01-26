@@ -14,7 +14,7 @@ Chunk* chunk = nullptr;
 Renderer::Renderer(sf::Window &window, Camera &camera) : 
 	m_window(window),
 	m_camera(camera),
-	m_projection_settings({ 45.0f, (float)window.getSize().x / (float)window.getSize().y, 0.1f, 100.0f })
+	m_projection_settings({ 45.0f, (float)window.getSize().x / (float)window.getSize().y, 0.1f, 1000.0f })
 {
 	GLenum glew_status = glewInit();
 	if (glew_status != GLEW_OK)
@@ -23,7 +23,7 @@ Renderer::Renderer(sf::Window &window, Camera &camera) :
 		exit(1);
 	}
 
-	glViewport(0, 0, window.getSize().x, window.getSize().y);
+	setViewPort(window.getSize().x, window.getSize().y);
 	glEnable(GL_DEPTH_TEST);
 
 	m_shaders[SHADER_CHUNK].loadFromFile("res/shaders/chunk_vertex.glsl", "res/shaders/chunk_fragment.glsl");
@@ -63,6 +63,12 @@ void Renderer::render()
 	chunk->getMesh()->draw();
 
 	m_window.display();
+}
+
+void Renderer::setViewPort(int width, int height)
+{
+	glViewport(0, 0, width, height);
+	m_projection_settings.aspect = (float)width / (float)height;
 }
 
 glm::mat4 Renderer::getProjectionMatrix() const

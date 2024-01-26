@@ -30,6 +30,7 @@ public:
 	~Renderer();
 
 	void render();
+	void setViewPort(int width, int height);
 
 private:
 	sf::Window&	m_window;
