@@ -29,10 +29,7 @@ Renderer::Renderer(sf::Window &window, Camera &camera) :
 
 	m_shaders[SHADER_CHUNK].loadFromFile("res/shaders/chunk_vertex.glsl", "res/shaders/chunk_fragment.glsl");
 
-	sf::Image image;
-	image.loadFromFile("res/textures/blocks.png");
-	image.flipVertically();
-	m_textures[TEXTURE_BLOCKS].loadFromImage(image);
+	m_textures[TEXTURE_BLOCKS].loadFromFile("res/textures/blocks.png");
 
 	m_shaders[SHADER_CHUNK].bind();
     m_shaders[SHADER_CHUNK].setUniform("tex", 0);
@@ -50,7 +47,7 @@ void Renderer::render()
 	glClearColor(0.3f, 0.3f, 0.8f, 1.0f);
 
 	glActiveTexture(GL_TEXTURE0);
-	sf::Texture::bind(&(m_textures[TEXTURE_BLOCKS]));
+	m_textures[TEXTURE_BLOCKS].bind();
 	m_shaders[SHADER_CHUNK].bind();
 
     glm::mat4 projection = getProjectionMatrix();

@@ -7,13 +7,7 @@
 
 #include "Camera.hpp"
 #include "Shader.hpp"
-
-enum TextureType
-{
-	TEXTURE_BLOCKS,
-};
-
-#define TEXTURE_COUNT TEXTURE_BLOCKS + 1
+#include "Texture.hpp"
 
 struct ProjectionSettings
 {
@@ -38,7 +32,7 @@ private:
 
 	ProjectionSettings m_projection_settings;
 	Shader m_shaders[SHADER_COUNT];
-	sf::Texture m_textures[TEXTURE_COUNT];
+	Texture m_textures[TEXTURE_COUNT];
 
 	glm::mat4 getProjectionMatrix() const;
 };

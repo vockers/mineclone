@@ -37,7 +37,7 @@ void Shader::loadFromFile(const char *vertex_path, const char *fragment_path)
 		fragment_code = fragment_stream.str();
 		
 	}
-	catch (std::ifstream::failure e)
+	catch (std::ifstream::failure& e)
 	{
 		std::cerr << "Error: Shader::loadFromFile failed: " << e.what() << std::endl;
 		exit(1);
