@@ -24,7 +24,7 @@ public:
 private:
 	ChunkVector m_chunks;
 
-	const int render_distance;
+	const int render_distance = 1;
 
 	Camera& m_camera;
 };

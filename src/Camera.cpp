@@ -21,10 +21,10 @@ Camera::~Camera()
 {
 }
 
-void Camera::update(float delta_time)
+void Camera::update(float delta_time, Input& input)
 {
 	processKeyboard(delta_time);
-	processMouse(delta_time);
+	processMouse(delta_time, input);
 }
 
 const glm::vec3 &Camera::getPosition() const
@@ -61,10 +61,13 @@ void Camera::processKeyboard(float delta_time)
 		m_position += m_right * velocity;
 }
 
-void Camera::processMouse(float delta_time)
+void Camera::processMouse(float delta_time, Input& input)
 {
-	float xpos = sf::Mouse::getPosition().x;
-	float ypos = sf::Mouse::getPosition().y;
+	if (input.isCursorVisible())
+		return;
+
+	float xpos = input.getMousePosition().x;
+	float ypos = input.getMousePosition().y;
 
 	if (m_first_mouse)
 	{
@@ -75,17 +78,19 @@ void Camera::processMouse(float delta_time)
 
 	float xoffset = xpos - m_mouse_last_x;
 	float yoffset = m_mouse_last_y - ypos;
-
-	m_mouse_last_x = xpos;
-	m_mouse_last_y = ypos;
 	
 	m_yaw   += xoffset * delta_time * m_sensitivity;
 	m_pitch += yoffset * delta_time * m_sensitivity;
 
-	if (m_pitch > 90.0f)
-		m_pitch = 90.0f;
-	if (m_pitch < -90.0f)
-		m_pitch = -90.0f;
+	if (m_pitch > 89.0f)
+		m_pitch = 89.0f;
+	if (m_pitch < -89.0f)
+		m_pitch = -89.0f;
+
+	input.centerMousePosition();
+
+	m_mouse_last_x = input.getMousePosition().x;
+	m_mouse_last_y = input.getMousePosition().y;
 
 	updateVectors();
 }

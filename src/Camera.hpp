@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Input.hpp"
+
 class Camera
 {
 public:
@@ -11,7 +13,7 @@ public:
 		float yaw = -90.0f, float pitch = 0.0f);
 	~Camera();
 
-	void update(float delta_time);
+	void update(float delta_time, Input& input);
 
 	const glm::vec3& getPosition() const;
 	glm::mat4 getViewMatrix() const;
@@ -35,5 +37,5 @@ private:
 
 	void updateVectors();
 	void processKeyboard(float delta_time);
-	void processMouse(float delta_time);
+	void processMouse(float delta_time, Input& input);
 };

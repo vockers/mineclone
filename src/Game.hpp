@@ -4,6 +4,7 @@
 
 #include "Renderer.hpp"
 #include "World.hpp"
+#include "Input.hpp"
 
 class Game
 {
@@ -19,6 +20,7 @@ private:
 
 	sf::Window m_window;
 	sf::Clock m_clock;
+	Input m_input;
 	Camera m_camera;
 	World m_world;
 	Renderer m_renderer;

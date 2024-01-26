@@ -3,7 +3,6 @@
 #include <iostream>
 
 World::World(Camera& camera) : 
-	render_distance(3),
 	m_camera(camera)
 {
 }
