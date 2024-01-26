@@ -10,11 +10,10 @@
 #include "Chunk.hpp"
 #include "ChunkMesh.hpp"
 
-Chunk* chunk = nullptr;
-
-Renderer::Renderer(sf::Window &window, Camera &camera) : 
+Renderer::Renderer(sf::Window &window, Camera &camera, World &world) : 
 	m_window(window),
 	m_camera(camera),
+	m_world(world),
 	m_projection_settings({ 45.0f, (float)window.getSize().x / (float)window.getSize().y, 0.1f, 1000.0f })
 {
 	GLenum glew_status = glewInit();
@@ -34,7 +33,7 @@ Renderer::Renderer(sf::Window &window, Camera &camera) :
 	m_shaders[SHADER_CHUNK].bind();
     m_shaders[SHADER_CHUNK].setUniform("tex", 0);
 
-	chunk = new Chunk(glm::ivec2(0, 0));
+	m_world.updateChunks();
 }
 
 Renderer::~Renderer()
@@ -54,11 +53,15 @@ void Renderer::render()
 	m_shaders[SHADER_CHUNK].setUniform("projection", projection);
     glm::mat4 view = m_camera.getViewMatrix();
 	m_shaders[SHADER_CHUNK].setUniform("view", view);
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f));
-	m_shaders[SHADER_CHUNK].setUniform("model", model);
 
-	chunk->getMesh()->draw();
+	for (size_t i = 0; i < m_world.getChunks().size(); i++)
+	{
+		Chunk *chunk = m_world.getChunks()[i].get();
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(chunk->getPosition().x * CHUNK_SIZE, 0.0f, chunk->getPosition().y * CHUNK_SIZE));
+		m_shaders[SHADER_CHUNK].setUniform("model", model);
+		chunk->getMesh()->draw();
+	}
 
 	m_window.display();
 }

@@ -4,19 +4,17 @@
 
 #include "ChunkMesh.hpp"
 
-Chunk::Chunk(glm::ivec2 position) : m_position(position)
+Chunk::Chunk(glm::ivec2 position) : 
+	m_position(position),
+	m_mesh(nullptr)
 {
-	for (int x = 0; x < CHUNK_SIZE_X; x++)
+	for (int i = 0; i < CHUNK_VOLUME; i++)
 	{
-		for (int y = 0; y < CHUNK_SIZE_Y; y++)
-		{
-			for (int z = 0; z < CHUNK_SIZE_Z; z++)
-			{
-				m_blocks[x][y][z] = BlockType::Grass;
-			}
-		}
+		int x = i % CHUNK_SIZE;
+		int y = i / (CHUNK_SIZE * CHUNK_SIZE);
+		int z = (i / CHUNK_SIZE) % CHUNK_SIZE;
+		m_blocks[x][y][z] = BlockType::Grass;
 	}
-	m_mesh = new ChunkMesh(*this);
 }
 
 Chunk::~Chunk()
@@ -28,7 +26,17 @@ BlockType Chunk::getBlock(int x, int y, int z) const
 	return m_blocks[x][y][z];
 }
 
-ChunkMesh *Chunk::getMesh() const
+ChunkMesh* Chunk::getMesh() const
 {
-	return m_mesh;
+	return m_mesh.get();
+}
+
+const glm::ivec2 &Chunk::getPosition() const
+{
+	return m_position;
+}
+
+void Chunk::generateMesh()
+{
+	m_mesh = std::make_unique<ChunkMesh>(*this);
 }

@@ -89,37 +89,35 @@ block_atlas_t	g_block_atlas = {glm::vec2(1, 15), glm::vec2(1, 15), glm::vec2(1, 
 
 ChunkMesh::ChunkMesh(Chunk &chunk) : m_face_count(0)
 {
-	for (int x = 0; x < CHUNK_SIZE_X; x++) 
+	for (int i = 0; i < CHUNK_VOLUME; i++)
 	{
-		for (int y = 0; y < CHUNK_SIZE_Y; y++)
-		{
-			for (int z = 0; z < CHUNK_SIZE_Z; z++) 
-			{
-				BlockType block_type = chunk.getBlock(x, y, z);
-				block_atlas_t	block_atlas = g_block_atlas;
+		int x = i % CHUNK_SIZE;
+		int y = i / (CHUNK_SIZE * CHUNK_SIZE);
+		int z = (i / CHUNK_SIZE) % CHUNK_SIZE;
 
-				if (block_type == BlockType::Air)
-					continue;
-				// Front face
-				if (z == CHUNK_SIZE_Z - 1 || chunk.getBlock(x, y, z + 1) == BlockType::Air)
-					addFace(FRONT_FACE, block_atlas.front, glm::vec3(x, y, z));
-				// Back face
-				if (z == 0 || chunk.getBlock(x, y, z - 1) == BlockType::Air)
-					addFace(BACK_FACE, block_atlas.back, glm::vec3(x, y, z));
-				// Right face
-				if (x == CHUNK_SIZE_X - 1 || chunk.getBlock(x + 1, y, z) == BlockType::Air)
-					addFace(RIGHT_FACE, block_atlas.right, glm::vec3(x, y, z));
-				// Left face
-				if (x == 0 || chunk.getBlock(x - 1, y, z) == BlockType::Air)
-					addFace(LEFT_FACE, block_atlas.left, glm::vec3(x, y, z));	
-				// Top face
-				if (y  == CHUNK_SIZE_Y - 1 || chunk.getBlock(x, y + 1, z) == BlockType::Air)
-					addFace(TOP_FACE, block_atlas.top, glm::vec3(x, y, z));
-				// Bottom face
-				if (y == 0 || chunk.getBlock(x, y - 1, z) == BlockType::Air)
-					addFace(BOTTOM_FACE, block_atlas.bottom, glm::vec3(x, y, z));
-			}
-		}
+		BlockType block_type = chunk.getBlock(x, y, z);
+		block_atlas_t	block_atlas = g_block_atlas;
+
+		if (block_type == BlockType::Air)
+			continue;
+		// Front face
+		if (z == CHUNK_SIZE - 1 || chunk.getBlock(x, y, z + 1) == BlockType::Air)
+			addFace(FRONT_FACE, block_atlas.front, glm::vec3(x, y, z));
+		// Back face
+		if (z == 0 || chunk.getBlock(x, y, z - 1) == BlockType::Air)
+			addFace(BACK_FACE, block_atlas.back, glm::vec3(x, y, z));
+		// Right face
+		if (x == CHUNK_SIZE - 1 || chunk.getBlock(x + 1, y, z) == BlockType::Air)
+			addFace(RIGHT_FACE, block_atlas.right, glm::vec3(x, y, z));
+		// Left face
+		if (x == 0 || chunk.getBlock(x - 1, y, z) == BlockType::Air)
+			addFace(LEFT_FACE, block_atlas.left, glm::vec3(x, y, z));	
+		// Top face
+		if (y  == CHUNK_SIZE - 1 || chunk.getBlock(x, y + 1, z) == BlockType::Air)
+			addFace(TOP_FACE, block_atlas.top, glm::vec3(x, y, z));
+		// Bottom face
+		if (y == 0 || chunk.getBlock(x, y - 1, z) == BlockType::Air)
+			addFace(BOTTOM_FACE, block_atlas.bottom, glm::vec3(x, y, z));
 	}
 	glGenVertexArrays(1, &m_vao);
 	glGenBuffers(1, &m_vbo);

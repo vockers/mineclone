@@ -8,6 +8,7 @@
 #include "Camera.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
+#include "World.hpp"
 
 struct ProjectionSettings
 {
@@ -20,7 +21,7 @@ struct ProjectionSettings
 class Renderer
 {
 public:
-	Renderer(sf::Window& window, Camera& camera);
+	Renderer(sf::Window& window, Camera& camera, World& world);
 	~Renderer();
 
 	void render();
@@ -29,6 +30,7 @@ public:
 private:
 	sf::Window&	m_window;
 	Camera& m_camera;
+	World& m_world;
 
 	ProjectionSettings m_projection_settings;
 	Shader m_shaders[SHADER_COUNT];

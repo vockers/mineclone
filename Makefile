@@ -1,5 +1,5 @@
 CC		= g++
-CFLAGS	= -std=c++11 -Wall
+CFLAGS	= -Wall
 LDFLAGS	= -lsfml-graphics -lsfml-window -lsfml-system -lGLEW -lGL
 DEBUG_FLAGS	= -fsanitize=address -g
 

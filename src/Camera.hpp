@@ -13,6 +13,7 @@ public:
 
 	void update(float delta_time);
 
+	const glm::vec3& getPosition() const;
 	glm::mat4 getViewMatrix() const;
 
 private:
