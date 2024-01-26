@@ -28,6 +28,11 @@ private:
 	float m_speed;
 	float m_sensitivity;
 
+	float m_mouse_last_x;
+	float m_mouse_last_y;
+	bool m_first_mouse;
+
 	void updateVectors();
 	void processKeyboard(float delta_time);
+	void processMouse(float delta_time);
 };

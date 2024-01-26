@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <SFML/OpenGL.hpp>
+#include <SFML/Window.hpp>
 #include <SFML/Graphics/Image.hpp>
 #include <GL/glew.h>
 
