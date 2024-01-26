@@ -8,13 +8,6 @@
 #include "Camera.hpp"
 #include "Shader.hpp"
 
-enum ShaderType
-{
-	SHADER_CHUNK,
-};
-
-#define SHADER_COUNT SHADER_CHUNK + 1
-
 enum TextureType
 {
 	TEXTURE_BLOCKS,
@@ -33,14 +26,14 @@ struct ProjectionSettings
 class Renderer
 {
 public:
-	Renderer(sf::Window& window);
+	Renderer(sf::Window& window, Camera& camera);
 	~Renderer();
 
 	void render();
 
 private:
 	sf::Window&	m_window;
-	Camera m_camera;
+	Camera& m_camera;
 
 	ProjectionSettings m_projection_settings;
 	Shader m_shaders[SHADER_COUNT];

@@ -2,6 +2,8 @@
 
 #include "Chunk.hpp"
 
+#include <iostream>
+
 static const float FRONT_FACE[] = 
 {
 	// Position
@@ -85,9 +87,9 @@ typedef struct	block_atlas_s
 
 block_atlas_t	g_block_atlas = {glm::vec2(1, 15), glm::vec2(1, 15), glm::vec2(1, 15), glm::vec2(1, 15), glm::vec2(0, 15), glm::vec2(2, 15)};
 
-ChunkMesh::ChunkMesh(Chunk &chunk)
+ChunkMesh::ChunkMesh(Chunk &chunk) : m_face_count(0)
 {
-		for (int x = 0; x < CHUNK_SIZE_X; x++) 
+	for (int x = 0; x < CHUNK_SIZE_X; x++) 
 	{
 		for (int y = 0; y < CHUNK_SIZE_Y; y++)
 		{
@@ -98,7 +100,6 @@ ChunkMesh::ChunkMesh(Chunk &chunk)
 
 				if (block_type == BlockType::Air)
 					continue;
-				
 				// Front face
 				if (z == CHUNK_SIZE_Z - 1 || chunk.getBlock(x, y, z + 1) == BlockType::Air)
 					addFace(FRONT_FACE, block_atlas.front, glm::vec3(x, y, z));

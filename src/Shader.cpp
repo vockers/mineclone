@@ -46,9 +46,19 @@ void Shader::loadFromFile(const char *vertex_path, const char *fragment_path)
 	build(vertex_code.c_str(), fragment_code.c_str());
 }
 
-void Shader::bind() const
+void Shader::bind()
 {
 	glUseProgram(m_id);
+}
+
+void Shader::setUniform(const char *name, const glm::mat4 value)
+{
+	glUniformMatrix4fv(glGetUniformLocation(m_id, name), 1, GL_FALSE, &value[0][0]);
+}
+
+void Shader::setUniform(const char *name, const int value)
+{
+	glUniform1i(glGetUniformLocation(m_id, name), value);
 }
 
 void Shader::build(const char *vertex_code, const char *fragment_code)

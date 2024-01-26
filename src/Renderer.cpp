@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <SFML/OpenGL.hpp>
+#include <SFML/Graphics/Image.hpp>
 #include <GL/glew.h>
 
 #include "Chunk.hpp"
@@ -10,7 +11,10 @@
 
 Chunk* chunk = nullptr;
 
-Renderer::Renderer(sf::Window &window) : m_window(window)
+Renderer::Renderer(sf::Window &window, Camera &camera) : 
+	m_window(window),
+	m_camera(camera),
+	m_projection_settings({ 45.0f, (float)window.getSize().x / (float)window.getSize().y, 0.1f, 100.0f })
 {
 	GLenum glew_status = glewInit();
 	if (glew_status != GLEW_OK)
@@ -19,9 +23,18 @@ Renderer::Renderer(sf::Window &window) : m_window(window)
 		exit(1);
 	}
 
+	glViewport(0, 0, window.getSize().x, window.getSize().y);
+	glEnable(GL_DEPTH_TEST);
+
 	m_shaders[SHADER_CHUNK].loadFromFile("res/shaders/chunk_vertex.glsl", "res/shaders/chunk_fragment.glsl");
 
-	m_textures[TEXTURE_BLOCKS].loadFromFile("res/textures/blocks.png");
+	sf::Image image;
+	image.loadFromFile("res/textures/blocks.png");
+	image.flipVertically();
+	m_textures[TEXTURE_BLOCKS].loadFromImage(image);
+
+	m_shaders[SHADER_CHUNK].bind();
+    m_shaders[SHADER_CHUNK].setUniform("tex", 0);
 
 	chunk = new Chunk(glm::ivec2(0, 0));
 }
@@ -35,19 +48,18 @@ void Renderer::render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 	glClearColor(0.3f, 0.3f, 0.8f, 1.0f);
 
+	glActiveTexture(GL_TEXTURE0);
+	sf::Texture::bind(&(m_textures[TEXTURE_BLOCKS]));
 	m_shaders[SHADER_CHUNK].bind();
 
     glm::mat4 projection = getProjectionMatrix();
+	m_shaders[SHADER_CHUNK].setUniform("projection", projection);
     glm::mat4 view = m_camera.getViewMatrix();
+	m_shaders[SHADER_CHUNK].setUniform("view", view);
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f));
+	m_shaders[SHADER_CHUNK].setUniform("model", model);
 
-
-	// mat4_multiply(mvp, projection, view);
-	// mat4_identity(model);
-	// mat4_translate(model, (vec3_t){(float)chunk->pos.x * CHUNK_SIZE_X, 0.0f, (float)chunk->pos.y * CHUNK_SIZE_Z});
-	// mat4_multiply(mvp, mvp, model);
-	// glUniformMatrix4fv(glGetUniformLocation(g_renderer.shaders[SHADER_CHUNK], "mvp"), 1, GL_FALSE, *mvp);
-
-	// chunk_mesh_draw(g_chunks[i]->mesh);
 	chunk->getMesh()->draw();
 
 	m_window.display();

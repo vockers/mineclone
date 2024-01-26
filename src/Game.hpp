@@ -17,5 +17,7 @@ private:
 	void update();
 
 	sf::Window m_window;
+	sf::Clock m_clock;
+	Camera m_camera;
 	Renderer m_renderer;
 };

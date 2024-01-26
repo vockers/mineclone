@@ -1,6 +1,14 @@
 #pragma once
 
+#include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
+
+enum ShaderType
+{
+	SHADER_CHUNK,
+};
+
+#define SHADER_COUNT SHADER_CHUNK + 1
 
 class Shader
 {
@@ -9,7 +17,10 @@ public:
 	~Shader();
 
 	void loadFromFile(const char* vertex_path, const char* fragment_path);
-	void bind() const;
+	void bind();
+
+	void setUniform(const char* name, const glm::mat4 value);
+	void setUniform(const char* name, const int value);
 
 private:
 	GLuint m_id;
