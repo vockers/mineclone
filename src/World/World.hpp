@@ -3,26 +3,39 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <vector>
+#include <unordered_map>
 
 #include "../Camera.hpp"
 #include "Chunk.hpp"
 #include "ChunkMesh.hpp"
 
-using ChunkVector = std::vector<std::unique_ptr<Chunk>>;
+struct KeyHash
+{
+	std::size_t operator()(const glm::ivec2& k) const
+	{
+		return std::hash<int>()(k.x) ^ std::hash<int>()(k.y);
+	}
+	bool operator() (const glm::ivec2& lhs, const glm::ivec2& rhs) const
+	{
+		return lhs.x == rhs.x && lhs.y == rhs.y;
+	}
+};
+
+using ChunkMap = std::unordered_map<glm::ivec2, std::unique_ptr<Chunk>, KeyHash, KeyHash>;
 
 class World
 {
 public:
 	World(Camera& camera);
-	~World();
+	~World() = default;
 
 	void updateChunks();
 
-	const ChunkVector& getChunks() const;
+	const ChunkMap& getChunks() const;
 	Chunk* getChunk(glm::ivec2 position) const;
 
 private:
-	ChunkVector m_chunks;
+	ChunkMap m_chunks;
 
 	const int render_distance = 1;
 

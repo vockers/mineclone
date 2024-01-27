@@ -13,7 +13,7 @@ constexpr int SHADER_COUNT = SHADER_CHUNK + 1;
 class Shader
 {
 public:
-	Shader();
+	Shader() = default;
 	~Shader();
 
 	void loadFromFile(const char* vertex_path, const char* fragment_path);

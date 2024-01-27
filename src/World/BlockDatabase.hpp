@@ -7,9 +7,10 @@ enum class BlockType : unsigned char
 	Air,
 	Stone,
 	Grass,
+	Dirt,
 };
 
-constexpr int BLOCK_COUNT = static_cast<int>(BlockType::Grass) + 1;
+constexpr int BLOCK_COUNT = static_cast<int>(BlockType::Dirt) + 1;
 
 struct BlockData
 {

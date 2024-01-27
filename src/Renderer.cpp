@@ -55,9 +55,9 @@ void Renderer::render()
     glm::mat4 view = m_camera.getViewMatrix();
 	m_shaders[SHADER_CHUNK].setUniform("view", view);
 
-	for (size_t i = 0; i < m_world.getChunks().size(); i++)
+	for (auto it = m_world.getChunks().begin(); it != m_world.getChunks().end(); it++)
 	{
-		Chunk *chunk = m_world.getChunks()[i].get();
+		Chunk *chunk = it->second.get();
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(chunk->getPosition().x * CHUNK_SIZE, 0.0f, chunk->getPosition().y * CHUNK_SIZE));
 		m_shaders[SHADER_CHUNK].setUniform("model", model);

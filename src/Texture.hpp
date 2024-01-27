@@ -12,7 +12,7 @@ constexpr int TEXTURE_COUNT = TEXTURE_BLOCKS + 1;
 class Texture
 {
 public:
-	Texture();
+	Texture() = default;
 	~Texture();
 
 	void loadFromFile(const char* path);

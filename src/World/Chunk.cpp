@@ -13,7 +13,12 @@ Chunk::Chunk(glm::ivec2 position) :
 		int x = i % CHUNK_SIZE;
 		int y = i / (CHUNK_SIZE * CHUNK_SIZE);
 		int z = (i / CHUNK_SIZE) % CHUNK_SIZE;
-		m_blocks[x][y][z] = BlockType::Grass;
+		if (y < 25)
+			m_blocks[x][y][z] = BlockType::Stone;
+		else if (y < 31)
+			m_blocks[x][y][z] = BlockType::Dirt;
+		else
+			m_blocks[x][y][z] = BlockType::Grass;
 	}
 }
 

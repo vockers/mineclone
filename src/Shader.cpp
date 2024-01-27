@@ -5,10 +5,6 @@
 #include <sstream>
 #include <string>
 
-Shader::Shader()
-{
-}
-
 Shader::~Shader()
 {
 	glDeleteProgram(m_id);

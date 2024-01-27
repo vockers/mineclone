@@ -1,6 +1,6 @@
-CC		= g++
-CFLAGS	= -Wall
-LDFLAGS	= -lsfml-graphics -lsfml-window -lsfml-system -lGLEW -lGL
+CXX			= g++
+CXXFLAGS	= -Wall -MMD -MP
+LDFLAGS		= -lsfml-graphics -lsfml-window -lsfml-system -lGLEW -lGL
 DEBUG_FLAGS	= -fsanitize=address -g
 
 SRCS	= $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
@@ -12,12 +12,17 @@ NAME	= mineclone
 
 all: $(NAME)
 
+echo:
+	@echo $(CXXFLAGS)
+
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(OBJS) -o $(NAME) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) $(DEBUG_FLAGS) $(OBJS) -o $(NAME) $(LDFLAGS) 
+
+-include $(OBJS:.o=.d)
 
 $(OBJ_DIR)/%.o: src/%.cpp
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(DEBUG_FLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(DEBUG_FLAGS) -c $< -o $@
 
 clean:
 	rm -rf $(OBJ_DIR) $(NAME)

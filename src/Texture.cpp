@@ -2,10 +2,6 @@
 
 #include <SFML/Graphics/Image.hpp>
 
-Texture::Texture()
-{
-}
-
 Texture::~Texture()
 {
 	glDeleteTextures(1, &m_id);

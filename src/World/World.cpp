@@ -7,11 +7,7 @@ World::World(Camera& camera) :
 {
 }
 
-World::~World()
-{
-}
-
-const ChunkVector& World::getChunks() const
+const ChunkMap& World::getChunks() const
 {
 	return m_chunks;
 }
@@ -26,28 +22,16 @@ void World::updateChunks()
 		for (int x = -render_distance; x < render_distance; x++)
 		{
 			glm::ivec2 chunk_position = glm::ivec2(current_chunk_coord_x + x, current_chunk_coord_y + y);
-			if (getChunk(chunk_position) == nullptr)
-			{
-				m_chunks.push_back(std::make_unique<Chunk>(chunk_position));
-			}
+			if (m_chunks.find(chunk_position) == m_chunks.end())
+				m_chunks[chunk_position] = std::make_unique<Chunk>(chunk_position);
 		}
 	}
 
-	for (size_t i = 0; i < m_chunks.size(); i++)
+	for (auto it = m_chunks.begin(); it != m_chunks.end(); it++)
 	{
-		if (m_chunks[i]->getMesh() == nullptr)
+		if (it->second->getMesh() == nullptr)
 		{
-			m_chunks[i]->generateMesh();
+			it->second->generateMesh();
 		}
 	}
-}
-
-Chunk *World::getChunk(glm::ivec2 position) const
-{
-	for (size_t i = 0; i < m_chunks.size(); i++)
-	{
-		if (m_chunks[i]->getPosition() == position)
-			return m_chunks[i].get();
-	}
-	return (nullptr);
 }
