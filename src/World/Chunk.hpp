@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <memory>
 
-#include "Block.hpp"
+#include "BlockDatabase.hpp"
 
 constexpr int CHUNK_SIZE = 32;
 constexpr int CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;	

@@ -7,7 +7,7 @@ enum TextureType
 	TEXTURE_BLOCKS,
 };
 
-#define TEXTURE_COUNT TEXTURE_BLOCKS + 1
+constexpr int TEXTURE_COUNT = TEXTURE_BLOCKS + 1;
 
 class Texture
 {

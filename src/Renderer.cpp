@@ -7,8 +7,8 @@
 #include <SFML/Graphics/Image.hpp>
 #include <GL/glew.h>
 
-#include "Chunk.hpp"
-#include "ChunkMesh.hpp"
+#include "World/Chunk.hpp"
+#include "World/ChunkMesh.hpp"
 
 Renderer::Renderer(sf::Window &window, Camera &camera, World &world) : 
 	m_window(window),

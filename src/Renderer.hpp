@@ -8,7 +8,7 @@
 #include "Camera.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
-#include "World.hpp"
+#include "World/World.hpp"
 
 struct ProjectionSettings
 {

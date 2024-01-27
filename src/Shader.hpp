@@ -8,7 +8,7 @@ enum ShaderType
 	SHADER_CHUNK,
 };
 
-#define SHADER_COUNT SHADER_CHUNK + 1
+constexpr int SHADER_COUNT = SHADER_CHUNK + 1;
 
 class Shader
 {

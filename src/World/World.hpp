@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include "Camera.hpp"
+#include "../Camera.hpp"
 #include "Chunk.hpp"
 #include "ChunkMesh.hpp"
 

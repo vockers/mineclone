@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Renderer.hpp"
-#include "World.hpp"
+#include "World/World.hpp"
 #include "Input.hpp"
 
 class Game
