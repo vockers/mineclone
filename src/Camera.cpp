@@ -11,7 +11,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) :
 	m_yaw(yaw), 
 	m_pitch(pitch),
 	m_speed(40.0f),
-	m_sensitivity(25.0f),
+	m_sensitivity(5.0f),
 	m_first_mouse(true)
 {
 	updateVectors();
@@ -79,8 +79,8 @@ void Camera::processMouse(float delta_time, Input& input)
 	float xoffset = xpos - m_mouse_last_x;
 	float yoffset = m_mouse_last_y - ypos;
 	
-	m_yaw   += xoffset * delta_time * m_sensitivity;
-	m_pitch += yoffset * delta_time * m_sensitivity;
+	m_yaw   += xoffset * m_sensitivity * 0.01f;
+	m_pitch += yoffset * m_sensitivity * 0.01f;
 
 	if (m_pitch > 89.0f)
 		m_pitch = 89.0f;

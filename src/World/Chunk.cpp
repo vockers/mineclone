@@ -23,7 +23,7 @@ Chunk::Chunk(glm::ivec2 position) :
 				if (y < result * 32)
 					block = BlockType::Grass;
 				if (y < result * 32 && result < 0.3f)
-					block = BlockType::Dirt;
+					block = BlockType::Sand;
 				if (y < result * 5)
 					block = BlockType::Stone;
 

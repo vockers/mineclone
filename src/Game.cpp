@@ -29,4 +29,5 @@ void Game::update()
 {
 	sf::Time delta_time = m_clock.restart();
 	m_camera.update(delta_time.asSeconds(), m_input);
+	m_world.update();
 }

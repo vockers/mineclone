@@ -29,15 +29,18 @@ public:
 	World(Camera& camera);
 	~World() = default;
 
+	void update();
 	void updateChunks();
 
 	const ChunkMap& getChunks() const;
-	Chunk* getChunk(glm::ivec2 position) const;
 
 private:
 	ChunkMap m_chunks;
 
-	const int render_distance = 1;
+	const int RENDER_DISTANCE = 1;
 
 	Camera& m_camera;
+
+	const float CHUNK_UPDATE_MOVE_THRESHOLD = 20.0f;
+	glm::vec3 m_old_position;
 };
