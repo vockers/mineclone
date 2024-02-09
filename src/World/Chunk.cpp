@@ -3,22 +3,33 @@
 #include <iostream>
 
 #include "ChunkMesh.hpp"
+#include "../Utils/PerlinNoise.hpp"
 
 Chunk::Chunk(glm::ivec2 position) : 
 	m_position(position),
 	m_mesh(nullptr)
 {
-	for (int i = 0; i < CHUNK_VOLUME; i++)
+	const static siv::PerlinNoise::seed_type seed = 123456u;
+	const static siv::PerlinNoise perlin{seed};
+
+	for (int z = 0; z < CHUNK_SIZE; z++)
 	{
-		int x = i % CHUNK_SIZE;
-		int y = i / (CHUNK_SIZE * CHUNK_SIZE);
-		int z = (i / CHUNK_SIZE) % CHUNK_SIZE;
-		if (y < 25)
-			m_blocks[x][y][z] = BlockType::Stone;
-		else if (y < 31)
-			m_blocks[x][y][z] = BlockType::Dirt;
-		else
-			m_blocks[x][y][z] = BlockType::Grass;
+		for (int x = 0; x < CHUNK_SIZE; x++)
+		{
+			float result = perlin.octave2D_01((x + (float)position.x * CHUNK_SIZE) * 0.01f, (z + (float)position.y * CHUNK_SIZE) * 0.01f, 4);
+			for (int y = 0; y < CHUNK_SIZE; y++)
+			{
+				BlockType block = BlockType::Air;
+				if (y < result * 32)
+					block = BlockType::Grass;
+				if (y < result * 32 && result < 0.3f)
+					block = BlockType::Dirt;
+				if (y < result * 5)
+					block = BlockType::Stone;
+
+				m_blocks[x][y][z] = block;
+			}
+		}
 	}
 }
 
@@ -31,7 +42,7 @@ BlockType Chunk::getBlock(int x, int y, int z) const
 	return m_blocks[x][y][z];
 }
 
-ChunkMesh* Chunk::getMesh() const
+ChunkMesh *Chunk::getMesh() const
 {
 	return m_mesh.get();
 }
