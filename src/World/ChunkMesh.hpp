@@ -23,6 +23,7 @@ private:
 	std::vector<float> m_uvs;
 	std::vector<unsigned int> m_indices;
 	unsigned int m_face_count;
+	unsigned int m_index_count;
 
 	void addFace(const float *face, glm::vec2 uvs, glm::vec3 pos);
 };

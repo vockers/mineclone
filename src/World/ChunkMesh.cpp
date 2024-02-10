@@ -130,6 +130,12 @@ ChunkMesh::ChunkMesh(Chunk &chunk) : m_face_count(0)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
+
+	m_index_count = m_indices.size();
+
+	m_vertices.clear();
+	m_uvs.clear();
+	m_indices.clear();
 }
 
 ChunkMesh::~ChunkMesh()
@@ -139,7 +145,7 @@ ChunkMesh::~ChunkMesh()
 void ChunkMesh::draw()
 {
 	glBindVertexArray(m_vao);
-	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, m_index_count, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 
