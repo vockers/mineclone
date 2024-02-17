@@ -6,78 +6,78 @@
 
 // FBLRTB
 
-static const int FRONT_FACE[] = 
+static const unsigned int FRONT_FACE[] = 
 {
 	// Position // Normal
-	0, 0, 1, 	0, // Bottom left
-	1, 0, 1,	0, // Bottom right
-	1, 1, 1,	0, // Top right
-	0, 1, 1,	0, // Top left
+	0, 0, 1, 	0,	// Bottom left
+	1, 0, 1,	0,	// Bottom right
+	1, 1, 1,	0,	// Top right
+	0, 1, 1,	0,	// Top left
+	1, 1, 1,	0,	// Top right
+	0, 0, 1, 	0	// Bottom left
 };
 
-static const int BACK_FACE[] = 
+static const unsigned int BACK_FACE[] = 
 {
-	1, 0, 0,	1, 
+	1, 0, 0,	1,
 	0, 0, 0,	1,
-	0, 1, 0,	1,  
-	1, 1, 0,	1
+	0, 1, 0,	1,
+	1, 1, 0,	1,
+	0, 1, 0,	1,
+	1, 0, 0,	1
 };
 
-static const int LEFT_FACE[] = 
+static const unsigned int LEFT_FACE[] = 
 {
 	0, 0, 0,	2,
 	0, 0, 1,	2,
 	0, 1, 1,	2,
-	0, 1, 0,	2
+	0, 1, 0,	2,
+	0, 1, 1,	2,
+	0, 0, 0,	2
 };
 
-static const int RIGHT_FACE[] = 
+static const unsigned int RIGHT_FACE[] = 
 {
 	1, 0, 1,	3,
 	1, 0, 0,	3,
 	1, 1, 0,	3,
-	1, 1, 1,	3
+	1, 1, 1,	3,
+	1, 1, 0,	3,
+	1, 0, 1,	3
 };
 
-static const int TOP_FACE[] = {
+static const unsigned int TOP_FACE[] =
+{
 	0, 1, 1,	4,
 	1, 1, 1,	4,
 	1, 1, 0,	4,
-	0, 1, 0,	4
+	0, 1, 0,	4,
+	1, 1, 0,	4,
+	0, 1, 1,	4
 };
 
-static const int BOTTOM_FACE[] = 
+static const unsigned int BOTTOM_FACE[] = 
 {
 	0, 0, 0,	5,
 	1, 0, 0,	5,
 	1, 0, 1,	5,
-	0, 0, 1,	5
+	0, 0, 1,	5,
+	1, 0, 1,	5,
+	0, 0, 0,	5
 };
 
-static const unsigned int FACE_INDICES[] = 
+static const unsigned int FACE_UVS[] = 
 {
-	0, 1, 2,
-	2, 3, 0,
-	4, 5, 6,
-	6, 7, 4,
-	8, 9, 10,
-	10, 11, 8,
-	12, 13, 14,
-	14, 15, 12,
-	16, 17, 18,
-	18, 19, 16,
-	20, 21, 22,
-	22, 23, 20,
-};
-
-static const unsigned int FACE_UVS[] = {
 	0, 0,
 	1, 0,
 	1, 1,
-	0, 1
+	0, 1,
+	1, 1,
+	0, 0
 };
 
-ChunkMesh::ChunkMesh(Chunk &chunk) : m_face_count(0)
+ChunkMesh::ChunkMesh(Chunk &chunk)
 {
 	for (int i = 0; i < CHUNK_VOLUME; i++)
 	{
@@ -111,7 +111,6 @@ ChunkMesh::ChunkMesh(Chunk &chunk) : m_face_count(0)
 	}
 	glGenVertexArrays(1, &m_vao);
 	glGenBuffers(1, &m_vbo);
-	glGenBuffers(1, &m_ebo);
 
 	glBindVertexArray(m_vao);
 
@@ -121,13 +120,9 @@ ChunkMesh::ChunkMesh(Chunk &chunk) : m_face_count(0)
 	glVertexAttribIPointer(0, 1, GL_UNSIGNED_INT, sizeof(Vertex), (void *)0);
 	glEnableVertexAttribArray(0);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
-
-	m_index_count = m_indices.size();
+	m_vertex_count = m_vertices.size();
 
 	m_vertices.clear();
-	m_indices.clear();
 }
 
 ChunkMesh::~ChunkMesh()
@@ -137,13 +132,13 @@ ChunkMesh::~ChunkMesh()
 void ChunkMesh::draw()
 {
 	glBindVertexArray(m_vao);
-	glDrawElements(GL_TRIANGLES, m_index_count, GL_UNSIGNED_INT, 0);
+	glDrawArrays(GL_TRIANGLES, 0, m_vertex_count);
 	glBindVertexArray(0);
 }
 
-void ChunkMesh::addFace(const int *face, glm::ivec2 uvs, glm::ivec3 pos)
+void ChunkMesh::addFace(const unsigned int *face, glm::ivec2 uvs, glm::ivec3 pos)
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		Vertex vertex = 0;
 		vertex ^= (face[i * 4] + pos.x) << 26;
@@ -154,10 +149,4 @@ void ChunkMesh::addFace(const int *face, glm::ivec2 uvs, glm::ivec3 pos)
 		vertex ^= (FACE_UVS[i * 2 + 1] + uvs.y) << 1;
 		m_vertices.push_back(vertex);
 	}
-
-	for (int i = 0; i < 6; i++)
-	{
-		m_indices.push_back(FACE_INDICES[i] + 4 * m_face_count);
-	}
-	m_face_count++;
 }
