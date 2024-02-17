@@ -6,6 +6,8 @@
 
 class Chunk;
 
+using Vertex = uint32_t;
+
 class ChunkMesh
 {
 public:
@@ -19,11 +21,14 @@ private:
 	GLuint m_vbo, m_uv_vbo;
 	GLuint m_ebo;
 
-	std::vector<float> m_vertices;
+	std::vector<Vertex> m_vertices;
 	std::vector<float> m_uvs;
 	std::vector<unsigned int> m_indices;
 	unsigned int m_face_count;
 	unsigned int m_index_count;
 
-	void addFace(const float *face, glm::vec2 uvs, glm::vec3 pos);
+	void addFace(const int *face, glm::vec2 uvs, glm::ivec3 pos);
+
+	static const int POSITION_MASK = 0x1f;
+	static const int FACE_BITMASK = 0x7;
 };
