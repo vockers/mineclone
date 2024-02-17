@@ -18,17 +18,13 @@ public:
 
 private:
 	GLuint m_vao;
-	GLuint m_vbo, m_uv_vbo;
+	GLuint m_vbo;
 	GLuint m_ebo;
 
 	std::vector<Vertex> m_vertices;
-	std::vector<float> m_uvs;
 	std::vector<unsigned int> m_indices;
 	unsigned int m_face_count;
 	unsigned int m_index_count;
 
-	void addFace(const int *face, glm::vec2 uvs, glm::ivec3 pos);
-
-	static const int POSITION_MASK = 0x1f;
-	static const int FACE_BITMASK = 0x7;
+	void addFace(const int *face, glm::ivec2 uvs, glm::ivec3 pos);
 };

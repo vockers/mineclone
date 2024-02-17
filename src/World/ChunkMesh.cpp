@@ -70,11 +70,11 @@ static const unsigned int FACE_INDICES[] =
 	22, 23, 20,
 };
 
-static const float FACE_UVS[] = {
+static const unsigned int FACE_UVS[] = {
 	0, 0,
-	0.0625, 0,
-	0.0625, 0.0625,
-	0, 0.0625,
+	1, 0,
+	1, 1,
+	0, 1
 };
 
 ChunkMesh::ChunkMesh(Chunk &chunk) : m_face_count(0)
@@ -112,7 +112,6 @@ ChunkMesh::ChunkMesh(Chunk &chunk) : m_face_count(0)
 	glGenVertexArrays(1, &m_vao);
 	glGenBuffers(1, &m_vbo);
 	glGenBuffers(1, &m_ebo);
-	glGenBuffers(1, &m_uv_vbo);
 
 	glBindVertexArray(m_vao);
 
@@ -122,19 +121,12 @@ ChunkMesh::ChunkMesh(Chunk &chunk) : m_face_count(0)
 	glVertexAttribIPointer(0, 1, GL_UNSIGNED_INT, sizeof(Vertex), (void *)0);
 	glEnableVertexAttribArray(0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, m_uv_vbo);
-	glBufferData(GL_ARRAY_BUFFER, m_uvs.size() * sizeof(float), m_uvs.data(), GL_STATIC_DRAW);
-	
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void *)0);
-	glEnableVertexAttribArray(1);
-
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
 
 	m_index_count = m_indices.size();
 
 	m_vertices.clear();
-	m_uvs.clear();
 	m_indices.clear();
 }
 
@@ -149,7 +141,7 @@ void ChunkMesh::draw()
 	glBindVertexArray(0);
 }
 
-void ChunkMesh::addFace(const int *face, glm::vec2 uvs, glm::ivec3 pos)
+void ChunkMesh::addFace(const int *face, glm::ivec2 uvs, glm::ivec3 pos)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -158,16 +150,9 @@ void ChunkMesh::addFace(const int *face, glm::vec2 uvs, glm::ivec3 pos)
 		vertex ^= (face[i * 4 + 1] + pos.y) << 20;
 		vertex ^= (face[i * 4 + 2] + pos.z) << 14;
 		vertex ^= face[i * 4 + 3] << 11;
+		vertex ^= (FACE_UVS[i * 2] + uvs.x) << 6;
+		vertex ^= (FACE_UVS[i * 2 + 1] + uvs.y) << 1;
 		m_vertices.push_back(vertex);
-	}
-
-	float uv_x = 0.0625 * uvs.x;
-	float uv_y = 0.0625 * uvs.y;
-	for (int i = 0; i < 8;)
-	{
-		m_uvs.push_back(FACE_UVS[i] + uv_x);
-		m_uvs.push_back(FACE_UVS[i + 1] + uv_y);
-		i += 2;
 	}
 
 	for (int i = 0; i < 6; i++)

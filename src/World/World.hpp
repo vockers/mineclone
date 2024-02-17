@@ -37,7 +37,7 @@ public:
 private:
 	ChunkMap m_chunks;
 
-	const int RENDER_DISTANCE = 1;
+	const int RENDER_DISTANCE = 3;
 
 	Camera& m_camera;
 
