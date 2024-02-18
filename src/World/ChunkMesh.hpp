@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
+#include "BlockDatabase.hpp"
+
 class Chunk;
 
 using Vertex = uint32_t;
@@ -23,5 +25,5 @@ private:
 	std::vector<Vertex> m_vertices;
 	unsigned int m_vertex_count;
 
-	void addFace(const unsigned int *face, glm::ivec2 uvs, glm::ivec3 pos);
+	void addFace(const unsigned int *face, BlockType block_type, glm::ivec2 uvs, glm::ivec3 pos);
 };

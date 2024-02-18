@@ -90,24 +90,27 @@ ChunkMesh::ChunkMesh(Chunk &chunk)
 
 		if (block_type == BlockType::Air)
 			continue;
-		// Front face
-		if (z == CHUNK_SIZE - 1 || chunk.getBlock(x, y, z + 1) == BlockType::Air)
-			addFace(FRONT_FACE, block_data.front, glm::ivec3(x, y, z));
-		// Back face
-		if (z == 0 || chunk.getBlock(x, y, z - 1) == BlockType::Air)
-			addFace(BACK_FACE, block_data.back, glm::ivec3(x, y, z));
-		// Right face
-		if (x == CHUNK_SIZE - 1 || chunk.getBlock(x + 1, y, z) == BlockType::Air)
-			addFace(RIGHT_FACE, block_data.right, glm::ivec3(x, y, z));
-		// Left face
-		if (x == 0 || chunk.getBlock(x - 1, y, z) == BlockType::Air)
-			addFace(LEFT_FACE, block_data.left, glm::ivec3(x, y, z));	
+		if (block_type != BlockType::Water)
+		{
+			// Front face
+			if (z == CHUNK_SIZE - 1 || chunk.getBlock(x, y, z + 1) == BlockType::Air || chunk.getBlock(x, y, z + 1) == BlockType::Water)
+				addFace(FRONT_FACE, block_type, block_data.front, glm::ivec3(x, y, z));
+			// Back face
+			if (z == 0 || chunk.getBlock(x, y, z - 1) == BlockType::Air || chunk.getBlock(x, y, z - 1) == BlockType::Water)
+				addFace(BACK_FACE, block_type, block_data.back, glm::ivec3(x, y, z));
+			// Right face
+			if (x == CHUNK_SIZE - 1 || chunk.getBlock(x + 1, y, z) == BlockType::Air || chunk.getBlock(x + 1, y, z) == BlockType::Water)
+				addFace(RIGHT_FACE, block_type, block_data.right, glm::ivec3(x, y, z));
+			// Left face
+			if (x == 0 || chunk.getBlock(x - 1, y, z) == BlockType::Air || chunk.getBlock(x - 1, y, z) == BlockType::Water)
+				addFace(LEFT_FACE, block_type, block_data.left, glm::ivec3(x, y, z));	
+			// Bottom face
+			if (y == 0 || chunk.getBlock(x, y - 1, z) == BlockType::Air || chunk.getBlock(x, y - 1, z) == BlockType::Water)
+				addFace(BOTTOM_FACE, block_type, block_data.bottom, glm::ivec3(x, y, z));
+		}
 		// Top face
-		if (y  == CHUNK_SIZE - 1 || chunk.getBlock(x, y + 1, z) == BlockType::Air)
-			addFace(TOP_FACE, block_data.top, glm::ivec3(x, y, z));
-		// Bottom face
-		if (y == 0 || chunk.getBlock(x, y - 1, z) == BlockType::Air)
-			addFace(BOTTOM_FACE, block_data.bottom, glm::ivec3(x, y, z));
+		if (y  == CHUNK_SIZE - 1 || chunk.getBlock(x, y + 1, z) == BlockType::Air || (chunk.getBlock(x, y + 1, z) == BlockType::Water && block_type != BlockType::Water))
+			addFace(TOP_FACE, block_type, block_data.top, glm::ivec3(x, y, z));
 	}
 	glGenVertexArrays(1, &m_vao);
 	glGenBuffers(1, &m_vbo);
@@ -136,7 +139,7 @@ void ChunkMesh::draw()
 	glBindVertexArray(0);
 }
 
-void ChunkMesh::addFace(const unsigned int *face, glm::ivec2 uvs, glm::ivec3 pos)
+void ChunkMesh::addFace(const unsigned int *face, BlockType block_type, glm::ivec2 uvs, glm::ivec3 pos)
 {
 	for (int i = 0; i < 6; i++)
 	{
@@ -147,6 +150,8 @@ void ChunkMesh::addFace(const unsigned int *face, glm::ivec2 uvs, glm::ivec3 pos
 		vertex ^= face[i * 4 + 3] << 11;
 		vertex ^= (FACE_UVS[i * 2] + uvs.x) << 6;
 		vertex ^= (FACE_UVS[i * 2 + 1] + uvs.y) << 1;
+		if (block_type == BlockType::Water)
+			vertex ^= 1;
 		m_vertices.push_back(vertex);
 	}
 }

@@ -5,6 +5,7 @@
 enum class BlockType : unsigned char
 {
 	Air,
+	Water,
 	Stone,
 	Grass,
 	Sand,

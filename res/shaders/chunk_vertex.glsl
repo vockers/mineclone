@@ -5,6 +5,7 @@ layout (location = 0) in uint vertex;
 out vec3 _position;
 out vec3 _normal;
 out	vec2 _uv;
+flat out uint _transparent;
 
 uniform mat4 projection;
 uniform mat4 view;
@@ -13,6 +14,7 @@ uniform mat4 model;
 #define POSITION_MASK uint(0x3f)
 #define FACE_MASK uint(0x7)
 #define UV_MASK uint(0x1f)
+#define TRANSPARENT_MASK uint(0x1)
 
 void extractPosition(in uint vertex, out vec3 position)
 {
@@ -60,5 +62,5 @@ void main()
 	gl_Position = projection * view * model * vec4(_position, 1.0);
 	extractUVS(vertex, _uv);
 	faceToNormal(vertex >> 11 & FACE_MASK, _normal);
-
+	_transparent = vertex & TRANSPARENT_MASK;
 }

@@ -24,7 +24,13 @@ public:
 	void generateMesh();
 
 private:
+	void generateDecorations();
+
 	glm::ivec2 m_position;
 	BlockType m_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 	std::unique_ptr<ChunkMesh> m_mesh;
+
+	static const int OCEAN_LEVEL = 12;
+	static const int MIN_HEIGHT = 2;
+	static const int MAX_HEIGHT = 32;
 };
