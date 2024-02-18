@@ -5,10 +5,11 @@
 #include <GL/glew.h>
 #include <SFML/Graphics.hpp>
 
-#include "Camera.hpp"
+#include "../Camera.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
-#include "World/World.hpp"
+#include "Cubemap.hpp"
+#include "../World/World.hpp"
 
 struct ProjectionSettings
 {
@@ -35,6 +36,7 @@ private:
 	ProjectionSettings m_projection_settings;
 	Shader m_shaders[SHADER_COUNT];
 	Texture m_textures[TEXTURE_COUNT];
+	Cubemap m_skybox;
 
 	glm::mat4 getProjectionMatrix() const;
 };

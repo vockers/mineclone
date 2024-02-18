@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "Renderer.hpp"
+#include "Renderer/Renderer.hpp"
 #include "World/World.hpp"
 #include "Input.hpp"
 

@@ -7,8 +7,8 @@
 #include <SFML/Graphics/Image.hpp>
 #include <GL/glew.h>
 
-#include "World/Chunk.hpp"
-#include "World/ChunkMesh.hpp"
+#include "../World/Chunk.hpp"
+#include "../World/ChunkMesh.hpp"
 
 Renderer::Renderer(sf::Window &window, Camera &camera, World &world) : 
 	m_window(window),
@@ -27,11 +27,16 @@ Renderer::Renderer(sf::Window &window, Camera &camera, World &world) :
 	glEnable(GL_DEPTH_TEST);
 
 	m_shaders[SHADER_CHUNK].loadFromFile("res/shaders/chunk_vertex.glsl", "res/shaders/chunk_fragment.glsl");
+	m_shaders[SHADER_CHUNK].bind();
+    m_shaders[SHADER_CHUNK].setUniform("tex", 0);
+
+	m_shaders[SHADER_CUBEMAP].loadFromFile("res/shaders/cubemap_vertex.glsl", "res/shaders/cubemap_fragment.glsl");
+	m_shaders[SHADER_CUBEMAP].bind();
+    m_shaders[SHADER_CUBEMAP].setUniform("tex", 0);
 
 	m_textures[TEXTURE_BLOCKS].loadFromFile("res/textures/blocks.png");
 
-	m_shaders[SHADER_CHUNK].bind();
-    m_shaders[SHADER_CHUNK].setUniform("tex", 0);
+	m_skybox.generate("res/textures/sky/top.png", "res/textures/sky/bottom.png", "res/textures/sky/left.png", "res/textures/sky/right.png", "res/textures/sky/front.png", "res/textures/sky/back.png");
 
 	m_world.updateChunks();
 }
@@ -46,13 +51,13 @@ void Renderer::render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 	glClearColor(0.3f, 0.3f, 0.8f, 1.0f);
 
+    glm::mat4 projection = getProjectionMatrix();
+    glm::mat4 view = m_camera.getViewMatrix();
+
 	glActiveTexture(GL_TEXTURE0);
 	m_textures[TEXTURE_BLOCKS].bind();
 	m_shaders[SHADER_CHUNK].bind();
-
-    glm::mat4 projection = getProjectionMatrix();
 	m_shaders[SHADER_CHUNK].setUniform("projection", projection);
-    glm::mat4 view = m_camera.getViewMatrix();
 	m_shaders[SHADER_CHUNK].setUniform("view", view);
 
 	for (auto it = m_world.getChunks().begin(); it != m_world.getChunks().end(); it++)
@@ -63,6 +68,14 @@ void Renderer::render()
 		m_shaders[SHADER_CHUNK].setUniform("model", model);
 		chunk->getMesh()->draw();
 	}
+
+	glDepthFunc(GL_LEQUAL);
+	m_shaders[SHADER_CUBEMAP].bind();
+	m_shaders[SHADER_CUBEMAP].setUniform("projection", projection);
+	view = glm::mat4(glm::mat3(m_camera.getViewMatrix())); // remove translation from the view matrix
+	m_shaders[SHADER_CUBEMAP].setUniform("view", view);
+	m_skybox.draw();
+	glDepthFunc(GL_LESS);
 
 	m_window.display();
 }

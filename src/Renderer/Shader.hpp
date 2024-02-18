@@ -6,9 +6,10 @@
 enum ShaderType
 {
 	SHADER_CHUNK,
+	SHADER_CUBEMAP
 };
 
-constexpr int SHADER_COUNT = SHADER_CHUNK + 1;
+constexpr int SHADER_COUNT = SHADER_CUBEMAP + 1;
 
 class Shader
 {
