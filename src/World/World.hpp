@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 #include "../Camera.hpp"
+#include "../Renderer/Renderer.hpp"
 #include "Chunk.hpp"
 #include "ChunkMesh.hpp"
 
@@ -26,20 +27,24 @@ using ChunkMap = std::unordered_map<glm::ivec2, std::unique_ptr<Chunk>, KeyHash,
 class World
 {
 public:
-	World(Camera& camera);
+	World(Camera& camera, Renderer& renderer);
 	~World() = default;
 
 	void update();
 	void updateChunks();
+	void render();
 
 	const ChunkMap& getChunks() const;
 
 private:
+	void renderChunks(ChunkMeshPart part);
+
 	ChunkMap m_chunks;
 
 	const int RENDER_DISTANCE = 3;
 
 	Camera& m_camera;
+	Renderer& m_renderer;
 
 	const float CHUNK_UPDATE_MOVE_THRESHOLD = 20.0f;
 	glm::vec3 m_old_position;

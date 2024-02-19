@@ -6,8 +6,8 @@ Game::Game() :
 	m_window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mineclone", sf::Style::Default, sf::ContextSettings(24, 8, 0, 3, 3)),
 	m_input(m_window),
 	m_camera(glm::vec3(0.0f, 40.0f, 30.0f)),
-	m_world(m_camera),
-	m_renderer(m_window, m_camera, m_world)
+	m_renderer(m_window, m_camera),
+	m_world(m_camera, m_renderer)
 {
 }
 
@@ -21,7 +21,10 @@ void Game::run()
 	{
 		m_input.update();
 		update();
-		m_renderer.render();
+		m_renderer.renderPrepare();
+		m_world.render();
+		m_renderer.renderSkybox();
+		m_window.display();
 	}
 }
 

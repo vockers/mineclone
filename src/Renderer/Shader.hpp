@@ -20,8 +20,8 @@ public:
 	void loadFromFile(const char* vertex_path, const char* fragment_path);
 	void bind();
 
-	void setUniform(const char* name, const glm::mat4 value);
-	void setUniform(const char* name, const int value);
+	void setUniform(const char* name, const glm::mat4 value) const;
+	void setUniform(const char* name, const int value) const;
 
 private:
 	GLuint m_id;

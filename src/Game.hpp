@@ -25,6 +25,6 @@ private:
 	sf::Clock m_clock;
 	Input m_input;
 	Camera m_camera;
-	World m_world;
 	Renderer m_renderer;
+	World m_world;
 };

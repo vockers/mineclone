@@ -2,11 +2,13 @@
 
 #include <iostream>
 
-World::World(Camera& camera) : 
-	m_camera(camera)
+World::World(Camera& camera, Renderer& renderer) : 
+	m_camera(camera), m_renderer(renderer)
 {
 	m_chunks.reserve(RENDER_DISTANCE * RENDER_DISTANCE * 4);
 	m_old_position = m_camera.getPosition();
+
+	updateChunks();
 }
 
 const ChunkMap& World::getChunks() const
@@ -45,5 +47,24 @@ void World::updateChunks()
 		{
 			it->second->generateMesh();
 		}
+	}
+}
+
+void World::render()
+{
+	// Render solid geometry before transparent geometry
+	renderChunks(ChunkMeshPart::Base);
+	renderChunks(ChunkMeshPart::Transparent);
+}
+
+void World::renderChunks(ChunkMeshPart part)
+{
+	for (auto it = m_chunks.begin(); it != m_chunks.end(); it++)
+	{
+		Chunk *chunk = it->second.get();
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(chunk->getPosition().x * CHUNK_SIZE, 0.0f, chunk->getPosition().y * CHUNK_SIZE));
+		m_renderer.getShader(SHADER_CHUNK).setUniform("model", model);
+		chunk->getMesh()->draw(part);
 	}
 }

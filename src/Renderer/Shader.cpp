@@ -47,12 +47,12 @@ void Shader::bind()
 	glUseProgram(m_id);
 }
 
-void Shader::setUniform(const char *name, const glm::mat4 value)
+void Shader::setUniform(const char *name, const glm::mat4 value) const
 {
 	glUniformMatrix4fv(glGetUniformLocation(m_id, name), 1, GL_FALSE, &value[0][0]);
 }
 
-void Shader::setUniform(const char *name, const int value)
+void Shader::setUniform(const char *name, const int value) const
 {
 	glUniform1i(glGetUniformLocation(m_id, name), value);
 }
