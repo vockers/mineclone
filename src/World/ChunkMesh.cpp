@@ -12,9 +12,9 @@ static const unsigned int FRONT_FACE[] =
 	0, 0, 1, 	0,	// Bottom left
 	1, 0, 1,	0,	// Bottom right
 	1, 1, 1,	0,	// Top right
-	0, 1, 1,	0,	// Top left
+	0, 0, 1, 	0,	// Bottom left
 	1, 1, 1,	0,	// Top right
-	0, 0, 1, 	0	// Bottom left
+	0, 1, 1,	0	// Top left
 };
 
 static const unsigned int BACK_FACE[] = 
@@ -22,9 +22,9 @@ static const unsigned int BACK_FACE[] =
 	1, 0, 0,	1,
 	0, 0, 0,	1,
 	0, 1, 0,	1,
-	1, 1, 0,	1,
+	1, 0, 0,	1,
 	0, 1, 0,	1,
-	1, 0, 0,	1
+	1, 1, 0,	1
 };
 
 static const unsigned int LEFT_FACE[] = 
@@ -32,9 +32,9 @@ static const unsigned int LEFT_FACE[] =
 	0, 0, 0,	2,
 	0, 0, 1,	2,
 	0, 1, 1,	2,
-	0, 1, 0,	2,
+	0, 0, 0,	2,
 	0, 1, 1,	2,
-	0, 0, 0,	2
+	0, 1, 0,	2
 };
 
 static const unsigned int RIGHT_FACE[] = 
@@ -42,9 +42,9 @@ static const unsigned int RIGHT_FACE[] =
 	1, 0, 1,	3,
 	1, 0, 0,	3,
 	1, 1, 0,	3,
-	1, 1, 1,	3,
+	1, 0, 1,	3,
 	1, 1, 0,	3,
-	1, 0, 1,	3
+	1, 1, 1,	3
 };
 
 static const unsigned int TOP_FACE[] =
@@ -52,9 +52,9 @@ static const unsigned int TOP_FACE[] =
 	0, 1, 1,	4,
 	1, 1, 1,	4,
 	1, 1, 0,	4,
-	0, 1, 0,	4,
+	0, 1, 1,	4,
 	1, 1, 0,	4,
-	0, 1, 1,	4
+	0, 1, 0,	4
 };
 
 static const unsigned int BOTTOM_FACE[] = 
@@ -62,9 +62,9 @@ static const unsigned int BOTTOM_FACE[] =
 	0, 0, 0,	5,
 	1, 0, 0,	5,
 	1, 0, 1,	5,
-	0, 0, 1,	5,
+	0, 0, 0,	5,
 	1, 0, 1,	5,
-	0, 0, 0,	5
+	0, 0, 1,	5
 };
 
 static const unsigned int FACE_UVS[] = 
@@ -72,9 +72,9 @@ static const unsigned int FACE_UVS[] =
 	0, 0,
 	1, 0,
 	1, 1,
-	0, 1,
+	0, 0,
 	1, 1,
-	0, 0
+	0, 1
 };
 
 ChunkMesh::ChunkMesh(Chunk &chunk)
