@@ -1,6 +1,8 @@
 #include "Cubemap.hpp"
 
-#include <SFML/Graphics/Image.hpp>
+#include <iostream>
+
+#include "../Utils/stb_image.h"
 
 static const float SKYBOX_VERTICES[] =
 {
@@ -102,8 +104,15 @@ void Cubemap::draw()
 
 void Cubemap::loadSide(GLenum side, const std::string &path)
 {
-	sf::Image img;
-	img.loadFromFile(path);
+	int width, height, channels;
+    stbi_set_flip_vertically_on_load(false);
+	unsigned char *img = stbi_load(path.c_str(), &width, &height, &channels, 0);
+	if (!img)
+	{
+		std::cerr << "Failed to load texture: " << path << std::endl;
+		exit(1);
+	}
 
-    glTexImage2D(side, 0, GL_RGBA, img.getSize().x, img.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
+    glTexImage2D(side, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
+    stbi_image_free(img);
 }

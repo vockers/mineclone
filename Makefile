@@ -1,6 +1,6 @@
 CXX			= g++
 CXXFLAGS	= -Wall -MMD -MP
-LDFLAGS		= -lsfml-graphics -lsfml-window -lsfml-system -lGLEW -lGL
+LDFLAGS		= -lSDL2 -lGLEW -lGL
 DEBUG_FLAGS	= -fsanitize=address -g
 
 SRCS	= $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)

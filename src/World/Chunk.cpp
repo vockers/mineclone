@@ -48,21 +48,6 @@ Chunk::~Chunk()
 {
 }
 
-BlockType Chunk::getBlock(int x, int y, int z) const
-{
-	return m_blocks[x][y][z];
-}
-
-ChunkMesh *Chunk::getMesh() const
-{
-	return m_mesh.get();
-}
-
-const glm::ivec2 &Chunk::getPosition() const
-{
-	return m_position;
-}
-
 void Chunk::generateMesh()
 {
 	m_mesh = std::make_unique<ChunkMesh>(*this);

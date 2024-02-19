@@ -36,6 +36,6 @@ private:
 	bool m_first_mouse;
 
 	void updateVectors();
-	void processKeyboard(float delta_time);
+	void processKeyboard(float delta_time, Input& input);
 	void processMouse(float delta_time, Input& input);
 };

@@ -3,8 +3,8 @@
 #include <memory>
 #include <vector>
 #include <GL/glew.h>
-#include <SFML/Graphics.hpp>
 
+#include "../Window.hpp"
 #include "../Camera.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
@@ -21,7 +21,7 @@ struct ProjectionSettings
 class Renderer
 {
 public:
-	Renderer(sf::Window& window, Camera& camera);
+	Renderer(Window& window, Camera& camera);
 	~Renderer();
 
 	void renderPrepare();
@@ -29,10 +29,10 @@ public:
 	void setViewPort(int width, int height);
 
 	const Shader& getShader(ShaderType type) const { return m_shaders[type]; }
-	const sf::Window& getWindow() const { return m_window; }
+	const Window& getWindow() const { return m_window; }
 
 private:
-	sf::Window&	m_window;
+	Window&	m_window;
 	Camera& m_camera;
 
 	ProjectionSettings m_projection_settings;

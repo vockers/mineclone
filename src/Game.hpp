@@ -1,9 +1,10 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include <SDL2/SDL.h>
 
 #include "Renderer/Renderer.hpp"
 #include "World/World.hpp"
+#include "Window.hpp"
 #include "Input.hpp"
 
 constexpr int WINDOW_WIDTH = 1280;
@@ -21,8 +22,8 @@ private:
 	void processEvents();
 	void update();
 
-	sf::Window m_window;
-	sf::Clock m_clock;
+	Window m_window;
+	int m_current_time;
 	Input m_input;
 	Camera m_camera;
 	Renderer m_renderer;

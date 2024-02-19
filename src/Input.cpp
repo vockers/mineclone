@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Input::Input(sf::Window &window) :
+Input::Input(Window &window) :
 	m_window(window),
 	m_cursor_visible(true)
 {
@@ -14,46 +14,50 @@ Input::~Input()
 
 void Input::update()
 {
-	sf::Event event;
+	SDL_Event event;
 
-	while (m_window.pollEvent(event))
+	while (SDL_PollEvent(&event))
 	{
 		switch (event.type)
 		{
-		case sf::Event::Closed:
+		case SDL_QUIT:
 			m_window.close();
 			break;
-		case sf::Event::KeyPressed:
-			if (event.key.code == sf::Keyboard::Escape)
+		case SDL_KEYDOWN:
+			if (event.key.keysym.sym == SDLK_ESCAPE)
 				m_window.close();
 			break;
-		case sf::Event::MouseButtonPressed:
-			if (event.mouseButton.button == sf::Mouse::Left)
+		case SDL_MOUSEBUTTONDOWN:
+			if (event.button.button == SDL_BUTTON_LEFT)
 			{
 				m_cursor_visible = !m_cursor_visible;
-				m_window.setMouseCursorVisible(m_cursor_visible);
-				m_window.setMouseCursorGrabbed(!m_cursor_visible);
+				SDL_ShowCursor(m_cursor_visible);
+				SDL_SetRelativeMouseMode(m_cursor_visible ? SDL_FALSE : SDL_TRUE);
 			}
 			break;
 		default:
 			break;
 		}
 	}
+	SDL_PumpEvents();
+	m_keystate = SDL_GetKeyboardState(NULL);
 }
 
-sf::Vector2i Input::getMousePosition() const
+glm::ivec2 Input::getMousePosition() const
 {
-	return sf::Mouse::getPosition(m_window);
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	return glm::ivec2(x, y);
 }
 
-void Input::setMousePosition(int x, int y)
+bool Input::isKeyPressed(SDL_Scancode key) const
 {
-	sf::Mouse::setPosition(sf::Vector2i(x, y), m_window);
+	return m_keystate[key] == 1;
 }
 
 void Input::centerMousePosition()
 {
-	setMousePosition(m_window.getSize().x / 2, m_window.getSize().y / 2);
+	SDL_WarpMouseInWindow(m_window.getWindow(), m_window.getSize().x / 2, m_window.getSize().y / 2);
 }
 
 bool Input::isCursorVisible() const

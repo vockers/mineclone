@@ -16,10 +16,11 @@ public:
 	Chunk(glm::ivec2 position);
 	~Chunk();
 
-	BlockType getBlock(int x, int y, int z) const;
+	BlockType getBlock(int x, int y, int z) const { return m_blocks[x][y][z]; }
 
-	ChunkMesh* getMesh() const;
-	const glm::ivec2& getPosition() const;
+	ChunkMesh* getMesh() const { return m_mesh.get(); }
+	glm::ivec2 getPosition() const { return m_position; }
+	glm::vec3 getWorldPosition() const { return glm::vec3(m_position.x * CHUNK_SIZE, 0, m_position.y * CHUNK_SIZE); }
 
 	void generateMesh();
 

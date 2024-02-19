@@ -7,7 +7,7 @@
 #include <SFML/Graphics/Image.hpp>
 #include <GL/glew.h>
 
-Renderer::Renderer(sf::Window &window, Camera &camera) : 
+Renderer::Renderer(Window &window, Camera &camera) : 
 	m_window(window),
 	m_camera(camera),
 	m_projection_settings({ 45.0f, (float)window.getSize().x / (float)window.getSize().y, 0.1f, 1000.0f })

@@ -1,8 +1,7 @@
 #include "Camera.hpp"
 
+#include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
-#include <SFML/Window/Keyboard.hpp>
-#include <SFML/Window/Mouse.hpp>
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) : 
 	m_position(position), 
@@ -11,7 +10,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) :
 	m_yaw(yaw), 
 	m_pitch(pitch),
 	m_speed(40.0f),
-	m_sensitivity(5.0f),
+	m_sensitivity(8.0f),
 	m_first_mouse(true)
 {
 	updateVectors();
@@ -23,7 +22,7 @@ Camera::~Camera()
 
 void Camera::update(float delta_time, Input& input)
 {
-	processKeyboard(delta_time);
+	processKeyboard(delta_time, input);
 	processMouse(delta_time, input);
 }
 
@@ -48,16 +47,16 @@ void Camera::updateVectors()
 	m_up = glm::normalize(glm::cross(m_right, m_front));
 }
 
-void Camera::processKeyboard(float delta_time)
+void Camera::processKeyboard(float delta_time, Input& input)
 {
 	float velocity = m_speed * delta_time;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	if (input.isKeyPressed(SDL_SCANCODE_W))
 		m_position += m_front * velocity;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	if (input.isKeyPressed(SDL_SCANCODE_S))
 		m_position -= m_front * velocity;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (input.isKeyPressed(SDL_SCANCODE_A))
 		m_position -= m_right * velocity;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (input.isKeyPressed(SDL_SCANCODE_D))
 		m_position += m_right * velocity;
 }
 
