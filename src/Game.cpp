@@ -3,7 +3,7 @@
 #include <SFML/OpenGL.hpp>
 
 Game::Game() : 
-	m_window(sf::VideoMode(1280, 720), "Mineclone", sf::Style::Default, sf::ContextSettings(24, 8, 0, 3, 3)),
+	m_window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mineclone", sf::Style::Default, sf::ContextSettings(24, 8, 0, 3, 3)),
 	m_input(m_window),
 	m_camera(glm::vec3(0.0f, 40.0f, 30.0f)),
 	m_world(m_camera),

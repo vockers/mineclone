@@ -63,13 +63,24 @@ void Renderer::render()
 	m_shaders[SHADER_CHUNK].setUniform("projection", projection);
 	m_shaders[SHADER_CHUNK].setUniform("view", view);
 
+	// Render solid geometry
 	for (auto it = m_world.getChunks().begin(); it != m_world.getChunks().end(); it++)
 	{
 		Chunk *chunk = it->second.get();
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(chunk->getPosition().x * CHUNK_SIZE, 0.0f, chunk->getPosition().y * CHUNK_SIZE));
 		m_shaders[SHADER_CHUNK].setUniform("model", model);
-		chunk->getMesh()->draw();
+		chunk->getMesh()->draw(ChunkMeshPart::Base);
+	}
+
+	// Render transparent geometry
+	for (auto it = m_world.getChunks().begin(); it != m_world.getChunks().end(); it++)
+	{
+		Chunk *chunk = it->second.get();
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(chunk->getPosition().x * CHUNK_SIZE, 0.0f, chunk->getPosition().y * CHUNK_SIZE));
+		m_shaders[SHADER_CHUNK].setUniform("model", model);
+		chunk->getMesh()->draw(ChunkMeshPart::Transparent);
 	}
 
 	glDepthFunc(GL_LEQUAL);

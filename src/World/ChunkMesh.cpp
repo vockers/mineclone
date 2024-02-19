@@ -112,6 +112,10 @@ ChunkMesh::ChunkMesh(Chunk &chunk)
 		if (y  == CHUNK_SIZE - 1 || chunk.getBlock(x, y + 1, z) == BlockType::Air || (chunk.getBlock(x, y + 1, z) == BlockType::Water && block_type != BlockType::Water))
 			addFace(TOP_FACE, block_type, block_data.top, glm::ivec3(x, y, z));
 	}
+	m_vertices.reserve(m_base_vertices.size() + m_transparent_vertices.size());
+	m_vertices.insert(m_vertices.end(), m_base_vertices.begin(), m_base_vertices.end());
+	m_vertices.insert(m_vertices.end(), m_transparent_vertices.begin(), m_transparent_vertices.end());
+
 	glGenVertexArrays(1, &m_vao);
 	glGenBuffers(1, &m_vbo);
 
@@ -123,8 +127,11 @@ ChunkMesh::ChunkMesh(Chunk &chunk)
 	glVertexAttribIPointer(0, 1, GL_UNSIGNED_INT, sizeof(Vertex), (void *)0);
 	glEnableVertexAttribArray(0);
 
-	m_vertex_count = m_vertices.size();
+	m_base_vertex_count = m_base_vertices.size();
+	m_transparent_vertex_count = m_transparent_vertices.size();
 
+	m_base_vertices.clear();
+	m_transparent_vertices.clear();
 	m_vertices.clear();
 }
 
@@ -132,10 +139,13 @@ ChunkMesh::~ChunkMesh()
 {
 }
 
-void ChunkMesh::draw()
+void ChunkMesh::draw(ChunkMeshPart part)
 {
 	glBindVertexArray(m_vao);
-	glDrawArrays(GL_TRIANGLES, 0, m_vertex_count);
+	if (part == ChunkMeshPart::Base)
+		glDrawArrays(GL_TRIANGLES, 0, m_base_vertex_count);
+	else
+		glDrawArrays(GL_TRIANGLES, m_base_vertex_count, m_transparent_vertex_count);
 	glBindVertexArray(0);
 }
 
@@ -151,7 +161,11 @@ void ChunkMesh::addFace(const unsigned int *face, BlockType block_type, glm::ive
 		vertex ^= (FACE_UVS[i * 2] + uvs.x) << 6;
 		vertex ^= (FACE_UVS[i * 2 + 1] + uvs.y) << 1;
 		if (block_type == BlockType::Water)
+		{
 			vertex ^= 1;
-		m_vertices.push_back(vertex);
+			m_transparent_vertices.push_back(vertex);
+		}
+		else
+			m_base_vertices.push_back(vertex);
 	}
 }

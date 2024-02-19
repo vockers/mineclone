@@ -6,6 +6,9 @@
 #include "World/World.hpp"
 #include "Input.hpp"
 
+constexpr int WINDOW_WIDTH = 1280;
+constexpr int WINDOW_HEIGHT = 720;
+
 class Game
 {
 public:
