@@ -3,12 +3,14 @@
 #include <iostream>
 
 World::World(Camera& camera, Renderer& renderer) : 
-	m_camera(camera), m_renderer(renderer)
+	m_camera(camera), m_renderer(renderer), m_update_thread{}
 {
 	m_chunks.reserve(RENDER_DISTANCE * RENDER_DISTANCE * 4);
 	m_old_position = m_camera.getPosition();
 
 	updateChunks();
+
+	m_update_thread = std::thread{&World::update, this};
 }
 
 const ChunkMap& World::getChunks() const
@@ -18,11 +20,14 @@ const ChunkMap& World::getChunks() const
 
 void World::update()
 {
-	glm::vec3 distance_moved = m_old_position - m_camera.getPosition();
-	if (glm::length(distance_moved) > CHUNK_UPDATE_MOVE_THRESHOLD)
+	while (m_renderer.getWindow().isOpen())
 	{
-		updateChunks();
-		m_old_position = m_camera.getPosition();
+		glm::vec3 distance_moved = m_old_position - m_camera.getPosition();
+		if (glm::length(distance_moved) > CHUNK_UPDATE_MOVE_THRESHOLD)
+		{
+			updateChunks();
+			m_old_position = m_camera.getPosition();
+		}
 	}
 }
 
@@ -62,6 +67,10 @@ void World::renderChunks(ChunkMeshPart part)
 	for (auto it = m_chunks.begin(); it != m_chunks.end(); it++)
 	{
 		Chunk *chunk = it->second.get();
+		if (chunk->getMesh() == nullptr)
+			continue;
+		if (chunk->getMesh()->isGenerated() == false)
+			chunk->getMesh()->generateMesh();
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(chunk->getPosition().x * CHUNK_SIZE, 0.0f, chunk->getPosition().y * CHUNK_SIZE));
 		m_renderer.getShader(SHADER_CHUNK).setUniform("model", model);

@@ -29,6 +29,7 @@ public:
 	void setViewPort(int width, int height);
 
 	const Shader& getShader(ShaderType type) const { return m_shaders[type]; }
+	const sf::Window& getWindow() const { return m_window; }
 
 private:
 	sf::Window&	m_window;

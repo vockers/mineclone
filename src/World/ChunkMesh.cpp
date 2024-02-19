@@ -77,7 +77,7 @@ static const unsigned int FACE_UVS[] =
 	0, 1
 };
 
-ChunkMesh::ChunkMesh(Chunk &chunk)
+ChunkMesh::ChunkMesh(Chunk &chunk) : m_generated(false)
 {
 	for (int i = 0; i < CHUNK_VOLUME; i++)
 	{
@@ -115,7 +115,26 @@ ChunkMesh::ChunkMesh(Chunk &chunk)
 	m_vertices.reserve(m_base_vertices.size() + m_transparent_vertices.size());
 	m_vertices.insert(m_vertices.end(), m_base_vertices.begin(), m_base_vertices.end());
 	m_vertices.insert(m_vertices.end(), m_transparent_vertices.begin(), m_transparent_vertices.end());
+}
 
+ChunkMesh::~ChunkMesh()
+{
+}
+
+void ChunkMesh::draw(ChunkMeshPart part)
+{
+	if (!m_generated)
+		return;
+	glBindVertexArray(m_vao);
+	if (part == ChunkMeshPart::Base)
+		glDrawArrays(GL_TRIANGLES, 0, m_base_vertex_count);
+	else
+		glDrawArrays(GL_TRIANGLES, m_base_vertex_count, m_transparent_vertex_count);
+	glBindVertexArray(0);
+}
+
+void ChunkMesh::generateMesh()
+{
 	glGenVertexArrays(1, &m_vao);
 	glGenBuffers(1, &m_vbo);
 
@@ -127,26 +146,16 @@ ChunkMesh::ChunkMesh(Chunk &chunk)
 	glVertexAttribIPointer(0, 1, GL_UNSIGNED_INT, sizeof(Vertex), (void *)0);
 	glEnableVertexAttribArray(0);
 
+	glBindVertexArray(0);
+
 	m_base_vertex_count = m_base_vertices.size();
 	m_transparent_vertex_count = m_transparent_vertices.size();
 
 	m_base_vertices.clear();
 	m_transparent_vertices.clear();
 	m_vertices.clear();
-}
-
-ChunkMesh::~ChunkMesh()
-{
-}
-
-void ChunkMesh::draw(ChunkMeshPart part)
-{
-	glBindVertexArray(m_vao);
-	if (part == ChunkMeshPart::Base)
-		glDrawArrays(GL_TRIANGLES, 0, m_base_vertex_count);
-	else
-		glDrawArrays(GL_TRIANGLES, m_base_vertex_count, m_transparent_vertex_count);
-	glBindVertexArray(0);
+	
+	m_generated = true;
 }
 
 void ChunkMesh::addFace(const unsigned int *face, BlockType block_type, glm::ivec2 uvs, glm::ivec3 pos)

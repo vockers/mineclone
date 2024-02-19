@@ -26,11 +26,11 @@ void Game::run()
 		m_renderer.renderSkybox();
 		m_window.display();
 	}
+	m_world.getUpdateThread().join();
 }
 
 void Game::update()
 {
 	sf::Time delta_time = m_clock.restart();
 	m_camera.update(delta_time.asSeconds(), m_input);
-	m_world.update();
 }

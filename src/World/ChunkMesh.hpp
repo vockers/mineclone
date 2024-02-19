@@ -23,6 +23,9 @@ public:
 	~ChunkMesh();
 
 	void draw(ChunkMeshPart part);
+	void generateMesh();
+	
+	bool isGenerated() const { return m_generated; }
 
 private:
 	GLuint m_vao;
@@ -33,6 +36,8 @@ private:
 	std::vector<Vertex> m_transparent_vertices;
 	unsigned int m_base_vertex_count;
 	unsigned int m_transparent_vertex_count;
+
+	bool m_generated;
 
 	void addFace(const unsigned int *face, BlockType block_type, glm::ivec2 uvs, glm::ivec3 pos);
 };

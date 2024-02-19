@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <unordered_map>
+#include <thread>
 
 #include "../Camera.hpp"
 #include "../Renderer/Renderer.hpp"
@@ -35,16 +36,19 @@ public:
 	void render();
 
 	const ChunkMap& getChunks() const;
+	std::thread& getUpdateThread() { return m_update_thread; }
 
 private:
 	void renderChunks(ChunkMeshPart part);
 
 	ChunkMap m_chunks;
 
-	const int RENDER_DISTANCE = 3;
+	const int RENDER_DISTANCE = 6;
 
 	Camera& m_camera;
 	Renderer& m_renderer;
+
+	std::thread m_update_thread;
 
 	const float CHUNK_UPDATE_MOVE_THRESHOLD = 20.0f;
 	glm::vec3 m_old_position;
