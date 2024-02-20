@@ -33,6 +33,10 @@ Renderer::Renderer(Window &window, Camera &camera) :
 	m_shaders[SHADER_CUBEMAP].bind();
     m_shaders[SHADER_CUBEMAP].setUniform("tex", 0);
 
+	m_shaders[SHADER_TEXT].loadFromFile("res/shaders/text_vertex.glsl", "res/shaders/text_fragment.glsl");
+	m_shaders[SHADER_TEXT].bind();
+    m_shaders[SHADER_TEXT].setUniform("text", 0);
+
 	m_textures[TEXTURE_BLOCKS].loadFromFile("res/textures/blocks.png");
 
 	m_skybox.generate("res/textures/sky/top.png", "res/textures/sky/bottom.png", "res/textures/sky/left.png", "res/textures/sky/right.png", "res/textures/sky/front.png", "res/textures/sky/back.png");

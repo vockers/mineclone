@@ -42,7 +42,7 @@ void Shader::loadFromFile(const char *vertex_path, const char *fragment_path)
 	build(vertex_code.c_str(), fragment_code.c_str());
 }
 
-void Shader::bind()
+void Shader::bind() const
 {
 	glUseProgram(m_id);
 }

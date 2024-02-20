@@ -6,6 +6,7 @@
 enum ShaderType
 {
 	SHADER_CHUNK,
+	SHADER_TEXT,
 	SHADER_CUBEMAP
 };
 
@@ -18,7 +19,7 @@ public:
 	~Shader();
 
 	void loadFromFile(const char* vertex_path, const char* fragment_path);
-	void bind();
+	void bind() const;
 
 	void setUniform(const char* name, const glm::mat4 value) const;
 	void setUniform(const char* name, const int value) const;

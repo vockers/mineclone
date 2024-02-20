@@ -6,6 +6,7 @@
 #include "World/World.hpp"
 #include "Window.hpp"
 #include "Input.hpp"
+#include "GUI/HUD.hpp"
 
 constexpr int WINDOW_WIDTH = 1280;
 constexpr int WINDOW_HEIGHT = 720;
@@ -28,4 +29,5 @@ private:
 	Camera m_camera;
 	Renderer m_renderer;
 	World m_world;
+	HUD m_hud;
 };
