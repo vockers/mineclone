@@ -2,9 +2,6 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
-#include <SFML/OpenGL.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics/Image.hpp>
 #include <GL/glew.h>
 
 Renderer::Renderer(Window &window, Camera &camera) : 
@@ -14,10 +11,7 @@ Renderer::Renderer(Window &window, Camera &camera) :
 {
 	GLenum glew_status = glewInit();
 	if (glew_status != GLEW_OK)
-	{
-		std::cerr << "Error: glewInit failed: " << glewGetErrorString(glew_status) << std::endl;
-		exit(1);
-	}
+		throw std::runtime_error("Error: " + std::string((const char*)glewGetErrorString(glew_status)));
 
 	setViewPort(window.getSize().x, window.getSize().y);
 	glEnable(GL_DEPTH_TEST);
@@ -25,19 +19,7 @@ Renderer::Renderer(Window &window, Camera &camera) :
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_CULL_FACE);
 
-	m_shaders[SHADER_CHUNK].loadFromFile("res/shaders/chunk_vertex.glsl", "res/shaders/chunk_fragment.glsl");
-	m_shaders[SHADER_CHUNK].bind();
-    m_shaders[SHADER_CHUNK].setUniform("tex", 0);
-
-	m_shaders[SHADER_CUBEMAP].loadFromFile("res/shaders/cubemap_vertex.glsl", "res/shaders/cubemap_fragment.glsl");
-	m_shaders[SHADER_CUBEMAP].bind();
-    m_shaders[SHADER_CUBEMAP].setUniform("tex", 0);
-
-	m_shaders[SHADER_TEXT].loadFromFile("res/shaders/text_vertex.glsl", "res/shaders/text_fragment.glsl");
-	m_shaders[SHADER_TEXT].bind();
-    m_shaders[SHADER_TEXT].setUniform("text", 0);
-
-	m_textures[TEXTURE_BLOCKS].loadFromFile("res/textures/blocks.png");
+	m_cubemap_shader.loadFromFile("res/shaders/cubemap_vertex.glsl", "res/shaders/cubemap_fragment.glsl");
 
 	m_skybox.generate("res/textures/sky/top.png", "res/textures/sky/bottom.png", "res/textures/sky/left.png", "res/textures/sky/right.png", "res/textures/sky/front.png", "res/textures/sky/back.png");
 }
@@ -51,21 +33,15 @@ void Renderer::renderPrepare()
 	setViewPort(m_window.getSize().x, m_window.getSize().y);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 	glClearColor(0.3f, 0.3f, 0.8f, 1.0f);
-
-	glActiveTexture(GL_TEXTURE0);
-	m_textures[TEXTURE_BLOCKS].bind();
-	m_shaders[SHADER_CHUNK].bind();
-	m_shaders[SHADER_CHUNK].setUniform("projection", getProjectionMatrix());
-	m_shaders[SHADER_CHUNK].setUniform("view", m_camera.getViewMatrix());
 }
 
 void Renderer::renderSkybox()
 {
 	glDepthFunc(GL_LEQUAL);
-	m_shaders[SHADER_CUBEMAP].bind();
-	m_shaders[SHADER_CUBEMAP].setUniform("projection", getProjectionMatrix());
+	m_cubemap_shader.bind();
+	m_cubemap_shader.setUniform("projection", getProjectionMatrix());
 	glm::mat4 view = glm::mat4(glm::mat3(m_camera.getViewMatrix())); // remove translation from the view matrix
-	m_shaders[SHADER_CUBEMAP].setUniform("view", view);
+	m_cubemap_shader.setUniform("view", view);
 	m_skybox.draw();
 	glDepthFunc(GL_LESS);
 }
@@ -84,4 +60,9 @@ glm::mat4 Renderer::getProjectionMatrix() const
 		m_projection_settings.near,
 		m_projection_settings.far
 	);
+}
+
+glm::mat4 Renderer::getOrthoMatrix() const
+{
+	return glm::ortho(0.0f, (float)m_window.getSize().x, 0.0f, (float)m_window.getSize().y);
 }

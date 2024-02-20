@@ -11,9 +11,11 @@ public:
     ~Text();
 
     void setFont(Font* font);
-    void render(const std::string& text, float x, float y, float scale);
+    void setText(const std::string& text, float x, float y, float scale);
+	void render();
 
 private:
+	std::string m_text;
     Font* m_font;
 
     GLuint m_vao;

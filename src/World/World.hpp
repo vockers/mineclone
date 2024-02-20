@@ -2,12 +2,12 @@
 
 #include <glm/glm.hpp>
 #include <memory>
-#include <vector>
 #include <unordered_map>
 #include <thread>
 
 #include "../Camera.hpp"
 #include "../Renderer/Renderer.hpp"
+#include "../Renderer/Texture.hpp"
 #include "Chunk.hpp"
 #include "ChunkMesh.hpp"
 
@@ -41,15 +41,16 @@ public:
 private:
 	void renderChunks(ChunkMeshPart part);
 
-	ChunkMap m_chunks;
-
-	const int RENDER_DISTANCE = 6;
-
 	Camera& m_camera;
 	Renderer& m_renderer;
 
+	Texture m_block_texture;
+	Shader m_chunk_shader;
+	ChunkMap m_chunks;
+
 	std::thread m_update_thread;
 
+	const int RENDER_DISTANCE = 6;
 	const float CHUNK_UPDATE_MOVE_THRESHOLD = 20.0f;
 	glm::vec3 m_old_position;
 };

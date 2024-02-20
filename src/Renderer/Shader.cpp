@@ -57,6 +57,11 @@ void Shader::setUniform(const char *name, const int value) const
 	glUniform1i(glGetUniformLocation(m_id, name), value);
 }
 
+void Shader::setUniform(const char* name, const glm::vec3 value) const
+{
+	glUniform3fv(glGetUniformLocation(m_id, name), 1, &value[0]);
+}
+
 void Shader::build(const char *vertex_code, const char *fragment_code)
 {
 	int success;

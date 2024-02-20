@@ -3,15 +3,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
 
-enum ShaderType
-{
-	SHADER_CHUNK,
-	SHADER_TEXT,
-	SHADER_CUBEMAP
-};
-
-constexpr int SHADER_COUNT = SHADER_CUBEMAP + 1;
-
 class Shader
 {
 public:
@@ -23,6 +14,7 @@ public:
 
 	void setUniform(const char* name, const glm::mat4 value) const;
 	void setUniform(const char* name, const int value) const;
+	void setUniform(const char* name, const glm::vec3 value) const;
 
 private:
 	GLuint m_id;

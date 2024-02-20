@@ -92,12 +92,15 @@ void Cubemap::generate(
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
 void Cubemap::draw()
 {
     glBindVertexArray(m_vao);
-    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }

@@ -1,24 +1,23 @@
 #pragma once
 
-#include <ft2build.h>
-
 #include "Font.hpp"
 #include "Text.hpp"
-#include "../Renderer/Shader.hpp"
+#include "GUI.hpp"
 
 class HUD
 {
 public:
-    HUD(const Shader& shader);
+    HUD(GUI& gui);
     ~HUD() = default;
 
     void update(float delta_time);
     void render();
 
 private:
-    FT_Library ft;
+	GUI& m_gui;
     Font m_font;
     Text m_fps_text;
 
-    const Shader& m_shader;
+	float m_fps_update_cooldown;
+	float m_fps_update_time;
 };

@@ -147,6 +147,7 @@ void ChunkMesh::generateMesh()
 	glEnableVertexAttribArray(0);
 
 	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	m_base_vertex_count = m_base_vertices.size();
 	m_transparent_vertex_count = m_transparent_vertices.size();

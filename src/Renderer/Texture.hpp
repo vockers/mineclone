@@ -2,13 +2,6 @@
 
 #include <GL/glew.h>
 
-enum TextureType
-{
-	TEXTURE_BLOCKS,
-};
-
-constexpr int TEXTURE_COUNT = TEXTURE_BLOCKS + 1;
-
 class Texture
 {
 public:

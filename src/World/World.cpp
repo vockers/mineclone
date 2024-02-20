@@ -1,10 +1,11 @@
 #include "World.hpp"
 
-#include <iostream>
-
 World::World(Camera& camera, Renderer& renderer) : 
 	m_camera(camera), m_renderer(renderer)
 {
+	m_block_texture.loadFromFile("res/textures/blocks.png");
+	m_chunk_shader.loadFromFile("res/shaders/chunk_vertex.glsl", "res/shaders/chunk_fragment.glsl");
+
 	m_chunks.reserve(RENDER_DISTANCE * RENDER_DISTANCE * 4);
 	m_old_position = m_camera.getPosition();
 
@@ -60,6 +61,12 @@ void World::updateChunks()
 
 void World::render()
 {
+	glActiveTexture(GL_TEXTURE0);
+	m_block_texture.bind();
+	m_chunk_shader.bind();
+	m_chunk_shader.setUniform("projection", m_renderer.getProjectionMatrix());
+	m_chunk_shader.setUniform("view", m_camera.getViewMatrix());
+
 	// Render solid geometry before transparent geometry
 	renderChunks(ChunkMeshPart::Base);
 	renderChunks(ChunkMeshPart::Transparent);
@@ -76,7 +83,7 @@ void World::renderChunks(ChunkMeshPart part)
 			chunk->getMesh()->generateMesh();
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, chunk->getWorldPosition());
-		m_renderer.getShader(SHADER_CHUNK).setUniform("model", model);
+		m_chunk_shader.setUniform("model", model);
 		chunk->getMesh()->draw(part);
 	}
 }
