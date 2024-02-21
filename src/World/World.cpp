@@ -3,8 +3,8 @@
 World::World(Camera& camera, Renderer& renderer) : 
 	m_camera(camera), m_renderer(renderer)
 {
-	m_block_texture.loadFromFile("res/textures/blocks.png");
-	m_chunk_shader.loadFromFile("res/shaders/chunk_vertex.glsl", "res/shaders/chunk_fragment.glsl");
+	m_block_texture.loadFromFile("assets/textures/blocks.png");
+	m_chunk_shader.loadFromFile("assets/shaders/chunk_vertex.glsl", "assets/shaders/chunk_fragment.glsl");
 
 	m_chunks.reserve(RENDER_DISTANCE * RENDER_DISTANCE * 2);
 	m_old_position = m_camera.getPosition();

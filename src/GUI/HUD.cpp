@@ -5,7 +5,7 @@
 
 HUD::HUD(GUI& gui) : m_gui(gui), m_font(m_gui)
 {
-    m_font.load("res/fonts/Minecraft.ttf", 14);
+    m_font.load("assets/fonts/Minecraft.ttf", 14);
 
     m_fps_text.setFont(&m_font);
 	m_fps_update_cooldown = 0.2f;

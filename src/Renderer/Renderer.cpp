@@ -19,9 +19,16 @@ Renderer::Renderer(Window &window, Camera &camera) :
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_CULL_FACE);
 
-	m_cubemap_shader.loadFromFile("res/shaders/cubemap_vertex.glsl", "res/shaders/cubemap_fragment.glsl");
+	m_cubemap_shader.loadFromFile("assets/shaders/cubemap_vertex.glsl", "assets/shaders/cubemap_fragment.glsl");
 
-	m_skybox.generate("res/textures/sky/top.png", "res/textures/sky/bottom.png", "res/textures/sky/left.png", "res/textures/sky/right.png", "res/textures/sky/front.png", "res/textures/sky/back.png");
+	m_skybox.generate(
+		"assets/textures/sky/top.png", 
+		"assets/textures/sky/bottom.png", 
+		"assets/textures/sky/left.png", 
+		"assets/textures/sky/right.png", 
+		"assets/textures/sky/front.png", 
+		"assets/textures/sky/back.png"
+	);
 }
 
 Renderer::~Renderer()

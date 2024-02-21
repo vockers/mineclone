@@ -8,7 +8,7 @@ GUI::GUI(Renderer& renderer)
 	if(FT_Init_FreeType(&ft))
 		throw std::runtime_error("Could not init freetype library");
 
-	m_text_shader.loadFromFile("res/shaders/text_vertex.glsl", "res/shaders/text_fragment.glsl");
+	m_text_shader.loadFromFile("assets/shaders/text_vertex.glsl", "assets/shaders/text_fragment.glsl");
 }
 
 GUI::~GUI()
