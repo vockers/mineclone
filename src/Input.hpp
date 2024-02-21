@@ -17,7 +17,7 @@ public:
 
 	void centerMousePosition();
 
-	bool isCursorVisible() const;
+	bool isCursorVisible() const { return m_cursor_visible; }
 
 private:
 	Window& m_window;

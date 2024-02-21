@@ -26,11 +26,6 @@ void Camera::update(float delta_time, Input& input)
 	processMouse(delta_time, input);
 }
 
-const glm::vec3 &Camera::getPosition() const
-{
-	return m_position;
-}
-
 glm::mat4 Camera::getViewMatrix() const
 {
 	return glm::lookAt(m_position, m_position + m_front, m_up);

@@ -15,7 +15,7 @@ public:
 
 	void update(float delta_time, Input& input);
 
-	const glm::vec3& getPosition() const;
+	const glm::vec3& getPosition() const { return m_position; }
 	glm::mat4 getViewMatrix() const;
 
 private:

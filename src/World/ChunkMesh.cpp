@@ -163,6 +163,7 @@ void ChunkMesh::addFace(const unsigned int *face, BlockType block_type, glm::ive
 {
 	for (int i = 0; i < 6; i++)
 	{
+		// Compress the vertex data into a single 32-bit integer
 		Vertex vertex = 0;
 		vertex ^= (face[i * 4] + pos.x) << 26;
 		vertex ^= (face[i * 4 + 1] + pos.y) << 20;

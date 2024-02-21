@@ -5,10 +5,7 @@
 Window::Window(int width, int height, const char *title) : m_closed(false)
 {
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
-    {
-        std::cerr << "Failed to initialize SDL" << std::endl;
-        exit(1);
-    }
+        throw std::runtime_error("Failed to initialize SDL");
 
     // SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
     // SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -19,9 +16,8 @@ Window::Window(int width, int height, const char *title) : m_closed(false)
     m_window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL);
     if (!m_window)
     {
-        std::cerr << "Failed to create window" << std::endl;
         SDL_Quit();
-        exit(1);
+        throw std::runtime_error("Failed to create window");
     }
     
     m_gl_context = SDL_GL_CreateContext(m_window);

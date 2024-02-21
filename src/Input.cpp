@@ -33,12 +33,14 @@ void Input::update()
 				m_cursor_visible = !m_cursor_visible;
 				SDL_ShowCursor(m_cursor_visible);
 				SDL_SetRelativeMouseMode(m_cursor_visible ? SDL_FALSE : SDL_TRUE);
+				centerMousePosition();
 			}
 			break;
 		default:
 			break;
 		}
 	}
+
 	SDL_PumpEvents();
 	m_keystate = SDL_GetKeyboardState(NULL);
 }
@@ -58,9 +60,4 @@ bool Input::isKeyPressed(SDL_Scancode key) const
 void Input::centerMousePosition()
 {
 	SDL_WarpMouseInWindow(m_window.getWindow(), m_window.getSize().x / 2, m_window.getSize().y / 2);
-}
-
-bool Input::isCursorVisible() const
-{
-	return m_cursor_visible;
 }

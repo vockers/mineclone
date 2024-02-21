@@ -21,7 +21,6 @@ public:
 	void run();
 
 private:
-	void processEvents();
 	void update();
 	void render();
 

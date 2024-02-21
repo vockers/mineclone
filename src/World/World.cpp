@@ -6,7 +6,7 @@ World::World(Camera& camera, Renderer& renderer) :
 	m_block_texture.loadFromFile("res/textures/blocks.png");
 	m_chunk_shader.loadFromFile("res/shaders/chunk_vertex.glsl", "res/shaders/chunk_fragment.glsl");
 
-	m_chunks.reserve(RENDER_DISTANCE * RENDER_DISTANCE * 4);
+	m_chunks.reserve(RENDER_DISTANCE * RENDER_DISTANCE * 2);
 	m_old_position = m_camera.getPosition();
 
 	updateChunks();
@@ -61,7 +61,6 @@ void World::updateChunks()
 
 void World::render()
 {
-	glActiveTexture(GL_TEXTURE0);
 	m_block_texture.bind();
 	m_chunk_shader.bind();
 	m_chunk_shader.setUniform("projection", m_renderer.getProjectionMatrix());
