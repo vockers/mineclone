@@ -48,6 +48,21 @@ Chunk::~Chunk()
 {
 }
 
+BlockType Chunk::getBlock(int x, int y, int z) const
+{
+	if (m_neighbours[0] != nullptr && x < 0)
+		return m_neighbours[0]->getBlock(CHUNK_SIZE - 1, y, z);
+	else if (m_neighbours[1] != nullptr && x >= CHUNK_SIZE)
+		return m_neighbours[1]->getBlock(0, y, z);
+	else if (m_neighbours[2] != nullptr && z < 0)
+		return m_neighbours[2]->getBlock(x, y, CHUNK_SIZE - 1);
+	else if (m_neighbours[3] != nullptr && z >= CHUNK_SIZE)
+		return m_neighbours[3]->getBlock(x, y, 0);
+	else if (z < 0 || z >= CHUNK_SIZE || x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_SIZE)
+		return BlockType::Air;
+	return m_blocks[x][y][z];
+}
+
 void Chunk::generateMesh()
 {
 	m_mesh = std::make_unique<ChunkMesh>(*this);

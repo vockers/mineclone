@@ -52,11 +52,24 @@ void World::updateChunks()
 
 	for (auto it = m_chunks.begin(); it != m_chunks.end(); it++)
 	{
+		if (m_chunks.find(glm::ivec2(it->first.x - 1, it->first.y)) != m_chunks.end())
+			it->second->setNeighbour(ChunkNeighbour::Left, m_chunks[glm::ivec2(it->first.x - 1, it->first.y)].get());
+		if (m_chunks.find(glm::ivec2(it->first.x + 1, it->first.y)) != m_chunks.end())
+			it->second->setNeighbour(ChunkNeighbour::Right, m_chunks[glm::ivec2(it->first.x + 1, it->first.y)].get());
+		if (m_chunks.find(glm::ivec2(it->first.x, it->first.y - 1)) != m_chunks.end())
+			it->second->setNeighbour(ChunkNeighbour::Top, m_chunks[glm::ivec2(it->first.x, it->first.y - 1)].get());
+		if (m_chunks.find(glm::ivec2(it->first.x, it->first.y + 1)) != m_chunks.end())
+			it->second->setNeighbour(ChunkNeighbour::Bottom, m_chunks[glm::ivec2(it->first.x, it->first.y + 1)].get());
 		if (it->second->getMesh() == nullptr)
 		{
 			it->second->generateMesh();
 		}
 	}
+}
+
+void World::generateChunks()
+{
+
 }
 
 void World::render()

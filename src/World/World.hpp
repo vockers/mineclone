@@ -33,6 +33,7 @@ public:
 
 	void update();
 	void updateChunks();
+	void generateChunks();
 	void render();
 
 	const ChunkMap& getChunks() const;
