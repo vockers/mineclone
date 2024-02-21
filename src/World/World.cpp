@@ -7,6 +7,7 @@ World::World(Camera& camera, Renderer& renderer) :
 	m_chunk_shader.loadFromFile("assets/shaders/chunk_vertex.glsl", "assets/shaders/chunk_fragment.glsl");
 
 	m_chunks.reserve(RENDER_DISTANCE * RENDER_DISTANCE * 2);
+	m_chunks_visited.reserve(RENDER_DISTANCE * RENDER_DISTANCE * 2);
 	m_old_position = m_camera.getPosition();
 
 	updateChunks();
@@ -40,31 +41,33 @@ void World::updateChunks()
 		round(m_camera.getPosition().x / CHUNK_SIZE), 
 		round(m_camera.getPosition().z / CHUNK_SIZE));
 
-	generateChunks(cam_chunk_pos.x, cam_chunk_pos.y, RENDER_DISTANCE);
-
-	for (auto it = m_chunks.begin(); it != m_chunks.end(); it++)
-	{
-		if (it->second->getMesh() == nullptr)
-		{
-			it->second->generateMesh();
-		}
-	}
+	generateChunks(cam_chunk_pos, cam_chunk_pos, RENDER_DISTANCE);
+	m_chunks_visited.clear();
 }
 
-void World::generateChunks(int x, int y, int distance)
+Chunk* World::generateChunks(const glm::ivec2& start, glm::ivec2 current, int distance)
 {
-	if (distance <= 0 || m_visited_chunks.find(glm::ivec2(x, y)) != m_visited_chunks.end())
-		return;
+	if (m_chunks_visited.find(current) != m_chunks_visited.end())
+		return m_chunks[current].get();
+	if (glm::distance(glm::vec2(start), glm::vec2(current)) > distance)
+		return nullptr;
 	
-	m_visited_chunks[glm::ivec2(x, y)] = true;
+	m_chunks_visited[current] = true;
 
-	generateChunks(x - 1, y, distance - 1);
-	generateChunks(x + 1, y, distance - 1);
-	generateChunks(x, y - 1, distance - 1);
-	generateChunks(x, y + 1, distance - 1);
+	if (m_chunks.find(current) == m_chunks.end())	
+	{
+		auto chunk = std::make_unique<Chunk>(current);
+		chunk.get()->generateMesh();
+		m_chunks[current] = std::move(chunk);
+	}
 
-	if (m_chunks.find(glm::ivec2(x, y)) == m_chunks.end())	
-		m_chunks[glm::ivec2(x, y)] = std::make_unique<Chunk>(glm::ivec2(x, y));
+	Chunk* chunk = m_chunks[current].get();
+	chunk->setNeighbour(ChunkNeighbour::Right, generateChunks(start, glm::ivec2(current.x + 1, current.y), distance));
+	chunk->setNeighbour(ChunkNeighbour::Left, generateChunks(start, glm::ivec2(current.x - 1, current.y), distance));
+	chunk->setNeighbour(ChunkNeighbour::Top, generateChunks(start, glm::ivec2(current.x, current.y + 1), distance));
+	chunk->setNeighbour(ChunkNeighbour::Bottom, generateChunks(start, glm::ivec2(current.x, current.y - 1), distance));
+
+	return chunk;
 }
 
 void World::render()
