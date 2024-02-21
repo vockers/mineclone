@@ -35,7 +35,10 @@ public:
 	void generateMesh();
 
 private:
+	int getHeight(int x, int z) const;
+	void generateTerrain();
 	void generateDecorations();
+	void generateTree(int x, int y, int z);
 
 	glm::ivec2 m_position;
 	BlockType m_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];

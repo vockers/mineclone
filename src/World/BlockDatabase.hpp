@@ -9,6 +9,8 @@ enum class BlockType : unsigned char
 	Stone,
 	Grass,
 	Sand,
+	Wood,
+	Leaves,
 	Dirt,
 };
 
