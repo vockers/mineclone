@@ -24,6 +24,7 @@ struct KeyHash
 };
 
 using ChunkMap = std::unordered_map<glm::ivec2, std::unique_ptr<Chunk>, KeyHash, KeyHash>;
+using ChunkVisitedMap = std::unordered_map<glm::ivec2, bool, KeyHash, KeyHash>;
 
 class World
 {
@@ -33,7 +34,7 @@ public:
 
 	void update();
 	void updateChunks();
-	void generateChunks();
+	void generateChunks(int x, int y, int distance);
 	void render();
 
 	const ChunkMap& getChunks() const;
@@ -48,6 +49,7 @@ private:
 	Texture m_block_texture;
 	Shader m_chunk_shader;
 	ChunkMap m_chunks;
+	ChunkVisitedMap m_visited_chunks;
 
 	std::thread m_update_thread;
 

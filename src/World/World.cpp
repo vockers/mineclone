@@ -40,15 +40,7 @@ void World::updateChunks()
 		round(m_camera.getPosition().x / CHUNK_SIZE), 
 		round(m_camera.getPosition().z / CHUNK_SIZE));
 
-	for (int y = -RENDER_DISTANCE; y < RENDER_DISTANCE; y++)
-	{
-		for (int x = -RENDER_DISTANCE; x < RENDER_DISTANCE; x++)
-		{
-			glm::ivec2 chunk_position = glm::ivec2(cam_chunk_pos.x + x, cam_chunk_pos.y + y);
-			if (m_chunks.find(chunk_position) == m_chunks.end())
-				m_chunks[chunk_position] = std::make_unique<Chunk>(chunk_position);
-		}
-	}
+	generateChunks(cam_chunk_pos.x, cam_chunk_pos.y, RENDER_DISTANCE);
 
 	for (auto it = m_chunks.begin(); it != m_chunks.end(); it++)
 	{
@@ -59,9 +51,20 @@ void World::updateChunks()
 	}
 }
 
-void World::generateChunks()
+void World::generateChunks(int x, int y, int distance)
 {
+	if (distance <= 0 || m_visited_chunks.find(glm::ivec2(x, y)) != m_visited_chunks.end())
+		return;
+	
+	m_visited_chunks[glm::ivec2(x, y)] = true;
 
+	generateChunks(x - 1, y, distance - 1);
+	generateChunks(x + 1, y, distance - 1);
+	generateChunks(x, y - 1, distance - 1);
+	generateChunks(x, y + 1, distance - 1);
+
+	if (m_chunks.find(glm::ivec2(x, y)) == m_chunks.end())	
+		m_chunks[glm::ivec2(x, y)] = std::make_unique<Chunk>(glm::ivec2(x, y));
 }
 
 void World::render()
