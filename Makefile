@@ -1,7 +1,7 @@
 CXX			= g++
 CXXFLAGS	= -Wall -MMD -MP -I/usr/include/freetype2
 LDFLAGS		= -lSDL2 -lGLEW -lGL -lfreetype
-DEBUG_FLAGS	= -fsanitize=address -g
+DEBUG_FLAGS	= -g #-fsanitize=address
 
 SRCS	= $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
 

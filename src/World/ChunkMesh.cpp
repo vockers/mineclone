@@ -171,9 +171,11 @@ void ChunkMesh::addFace(const unsigned int *face, BlockType block_type, glm::ive
 		vertex ^= face[i * 4 + 3] << 11;
 		vertex ^= (FACE_UVS[i * 2] + uvs.x) << 6;
 		vertex ^= (FACE_UVS[i * 2 + 1] + uvs.y) << 1;
-		if (block_type == BlockType::Water)
+		if (block_type == BlockType::Water || block_type == BlockType::Leaves)
 		{
-			vertex ^= 1;
+			if (block_type == BlockType::Water)
+				vertex ^= 1;
+
 			m_transparent_vertices.push_back(vertex);
 		}
 		else
