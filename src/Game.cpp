@@ -40,8 +40,8 @@ void Game::update()
 void Game::render()
 {
 	m_renderer.renderPrepare();
-	m_world.render();
 	m_renderer.renderSkybox();
+	m_world.render();
 	m_gui.render();
 	m_hud.render();
 	m_window.display();
