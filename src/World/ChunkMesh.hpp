@@ -40,4 +40,5 @@ private:
 	bool m_generated;
 
 	void addFace(const unsigned int *face, BlockType block_type, glm::ivec2 uvs, glm::ivec3 pos);
+	void addSprite(glm::ivec2 uvs, glm::ivec3 pos);
 };
