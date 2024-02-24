@@ -24,7 +24,7 @@ public:
 	Chunk(glm::ivec2 position);
 	~Chunk();
 
-	BlockType getBlock(int x, int y, int z) const;
+	Block getBlock(int x, int y, int z) const;
 
 	ChunkMesh* getMesh() const { return m_mesh.get(); }
 	glm::ivec2 getPosition() const { return m_position; }
@@ -41,7 +41,7 @@ private:
 	void generateTree(int x, int y, int z);
 
 	glm::ivec2 m_position;
-	BlockType m_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
+	Block m_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 	std::unique_ptr<ChunkMesh> m_mesh;
 	Chunk *m_neighbours[4];
 

@@ -74,7 +74,14 @@ static const unsigned int SPRITE_VERTICES[] =
 	0, 1, 1,	5,
 	1, 0, 0,	5,
 	0, 1, 1,	5,
-	1, 1, 0,	5
+	1, 1, 0,	5,
+
+	0, 0, 0,	5,
+	1, 0, 1,	5,
+	1, 1, 1,	5,
+	0, 0, 0,	5,
+	1, 1, 1,	5,
+	0, 1, 0,	5
 };
 
 static const unsigned int FACE_UVS[] = 
@@ -95,10 +102,10 @@ ChunkMesh::ChunkMesh(Chunk &chunk) : m_generated(false)
 		int y = i / (CHUNK_SIZE * CHUNK_SIZE);
 		int z = (i / CHUNK_SIZE) % CHUNK_SIZE;
 
-		BlockType block_type = chunk.getBlock(x, y, z);
+		Block block_type = chunk.getBlock(x, y, z);
 		BlockData block_data = BlockDatabase::get().getData(block_type);
 
-		if (block_type == BlockType::Air)
+		if (block_type == Block::Air)
 			continue;
 		
 		switch (block_data.meshType)
@@ -108,26 +115,26 @@ ChunkMesh::ChunkMesh(Chunk &chunk) : m_generated(false)
 				break;
 			case BlockMeshType::Default:
 			case BlockMeshType::Liquid:
-				if (block_type != BlockType::Water)
+				if (block_type != Block::Water)
 				{
 					// Front face
-					if (chunk.getBlock(x, y, z + 1) == BlockType::Air || chunk.getBlock(x, y, z + 1) == BlockType::Water)
+					if (canAddFace(block_data, chunk.getBlock(x, y, z + 1)))
 						addFace(FRONT_FACE, block_type, block_data.atlas.front, glm::ivec3(x, y, z));
 					// Back face
-					if (chunk.getBlock(x, y, z - 1) == BlockType::Air || chunk.getBlock(x, y, z - 1) == BlockType::Water)
+					if (canAddFace(block_data, chunk.getBlock(x, y, z - 1)))
 						addFace(BACK_FACE, block_type, block_data.atlas.back, glm::ivec3(x, y, z));
 					// Right face
-					if (chunk.getBlock(x + 1, y, z) == BlockType::Air || chunk.getBlock(x + 1, y, z) == BlockType::Water)
+					if (canAddFace(block_data, chunk.getBlock(x + 1, y, z)))
 						addFace(RIGHT_FACE, block_type, block_data.atlas.right, glm::ivec3(x, y, z));
 					// Left face
-					if (chunk.getBlock(x - 1, y, z) == BlockType::Air || chunk.getBlock(x - 1, y, z) == BlockType::Water)
+					if (canAddFace(block_data, chunk.getBlock(x - 1, y, z)))
 						addFace(LEFT_FACE, block_type, block_data.atlas.left, glm::ivec3(x, y, z));	
 					// Bottom face
-					if (chunk.getBlock(x, y - 1, z) == BlockType::Air || chunk.getBlock(x, y - 1, z) == BlockType::Water)
+					if (canAddFace(block_data, chunk.getBlock(x, y - 1, z)))
 						addFace(BOTTOM_FACE, block_type, block_data.atlas.bottom, glm::ivec3(x, y, z));
 				}
 				// Top face
-				if (chunk.getBlock(x, y + 1, z) == BlockType::Air || (chunk.getBlock(x, y + 1, z) == BlockType::Water && block_type != BlockType::Water))
+				if (canAddFace(block_data, chunk.getBlock(x, y + 1, z)))
 					addFace(TOP_FACE, block_type, block_data.atlas.top, glm::ivec3(x, y, z));
 
 				break;
@@ -152,7 +159,11 @@ void ChunkMesh::draw(ChunkMeshPart part)
 	if (part == ChunkMeshPart::Base)
 		glDrawArrays(GL_TRIANGLES, 0, m_base_vertex_count);
 	else
+	{
+		glDisable(GL_CULL_FACE);
 		glDrawArrays(GL_TRIANGLES, m_base_vertex_count, m_transparent_vertex_count);
+		glEnable(GL_CULL_FACE);
+	}
 	glBindVertexArray(0);
 }
 
@@ -182,7 +193,20 @@ void ChunkMesh::generateMesh()
 	m_generated = true;
 }
 
-void ChunkMesh::addFace(const unsigned int *face, BlockType block_type, glm::ivec2 uvs, glm::ivec3 pos)
+bool ChunkMesh::canAddFace(BlockData block_data, Block adjacent_block)
+{
+	if (adjacent_block == Block::Air)
+		return true;
+
+	BlockData adjacent_block_data = BlockDatabase::get().getData(adjacent_block);
+	if (adjacent_block_data.type == BlockType::Solid)
+		return false;
+	else if (block_data.type == BlockType::Liquid && adjacent_block_data.type == BlockType::Liquid)
+		return false;
+	return true;
+}
+
+void ChunkMesh::addFace(const unsigned int *face, Block block_type, glm::ivec2 uvs, glm::ivec3 pos)
 {
 	for (int i = 0; i < 6; i++)
 	{
@@ -194,9 +218,9 @@ void ChunkMesh::addFace(const unsigned int *face, BlockType block_type, glm::ive
 		vertex ^= face[i * 4 + 3] << 11;
 		vertex ^= (FACE_UVS[i * 2] + uvs.x) << 6;
 		vertex ^= (FACE_UVS[i * 2 + 1] + uvs.y) << 1;
-		if (block_type == BlockType::Water || block_type == BlockType::Leaves)
+		if (block_type == Block::Water || block_type == Block::Leaves)
 		{
-			if (block_type == BlockType::Water)
+			if (block_type == Block::Water)
 				vertex ^= 1;
 
 			m_transparent_vertices.push_back(vertex);
@@ -215,6 +239,18 @@ void ChunkMesh::addSprite(glm::ivec2 uvs, glm::ivec3 pos)
 		vertex ^= (SPRITE_VERTICES[i * 4 + 1] + pos.y) << 20;
 		vertex ^= (SPRITE_VERTICES[i * 4 + 2] + pos.z) << 14;
 		vertex ^= SPRITE_VERTICES[i * 4 + 3] << 11;
+		vertex ^= (FACE_UVS[i * 2] + uvs.x) << 6;
+		vertex ^= (FACE_UVS[i * 2 + 1] + uvs.y) << 1;
+		m_transparent_vertices.push_back(vertex);
+	}
+
+	for (int i = 0; i < 6; i++)
+	{
+		Vertex vertex = 0;
+		vertex ^= (SPRITE_VERTICES[(i + 6) * 4] + pos.x) << 26;
+		vertex ^= (SPRITE_VERTICES[(i + 6) * 4 + 1] + pos.y) << 20;
+		vertex ^= (SPRITE_VERTICES[(i + 6) * 4 + 2] + pos.z) << 14;
+		vertex ^= SPRITE_VERTICES[(i + 6) * 4 + 3] << 11;
 		vertex ^= (FACE_UVS[i * 2] + uvs.x) << 6;
 		vertex ^= (FACE_UVS[i * 2 + 1] + uvs.y) << 1;
 		m_transparent_vertices.push_back(vertex);

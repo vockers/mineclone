@@ -2,6 +2,13 @@
 
 #include <glm/glm.hpp>
 
+enum class BlockType : int
+{
+	Solid,
+	Liquid,
+	Flora,
+};
+
 enum class BlockMeshType : int
 {
 	Default,
@@ -19,7 +26,7 @@ struct BlockAtlas
 	glm::ivec2	bottom;
 };
 
-enum class BlockType : unsigned char
+enum class Block : unsigned char
 {
 	Air,
 	Water,
@@ -32,11 +39,12 @@ enum class BlockType : unsigned char
 	Dirt,
 };
 
-constexpr int BLOCK_COUNT = static_cast<int>(BlockType::Dirt) + 1;
+constexpr int BLOCK_COUNT = static_cast<int>(Block::Dirt) + 1;
 
 struct BlockData
 {
 	BlockAtlas		atlas;
+	BlockType		type;
 	BlockMeshType	meshType;
 };
 
@@ -45,7 +53,7 @@ class BlockDatabase
 public:
 	static BlockDatabase& get();
 
-	const BlockData& getData(BlockType type) const;
+	const BlockData& getData(Block type) const;
 
 private:
 	BlockDatabase();
