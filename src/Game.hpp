@@ -9,28 +9,31 @@
 #include "GUI/GUI.hpp"
 #include "GUI/HUD.hpp"
 
-constexpr int WINDOW_WIDTH = 1280;
-constexpr int WINDOW_HEIGHT = 720;
-
-class Game
+namespace mc
 {
-public:
-	Game();
-	~Game();
+	constexpr int WINDOW_WIDTH = 1280;
+	constexpr int WINDOW_HEIGHT = 720;
 
-	void run();
+	class Game
+	{
+	public:
+		Game();
+		~Game();
 
-private:
-	void update();
-	void render();
+		void run();
 
-	Window m_window;
-	Input m_input;
-	Camera m_camera;
-	Renderer m_renderer;
-	World m_world;
-	GUI m_gui;
-	HUD m_hud;
+	private:
+		void update();
+		void render();
 
-	int m_current_time;
-};
+		Window m_window;
+		Input m_input;
+		Camera m_camera;
+		Renderer m_renderer;
+		World m_world;
+		GUI m_gui;
+		HUD m_hud;
+
+		int m_current_time;
+	};
+}

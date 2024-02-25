@@ -6,40 +6,43 @@
 
 #include "BlockDatabase.hpp"
 
-class Chunk;
-
-using Vertex = uint32_t;
-
-enum class ChunkMeshPart
+namespace mc
 {
-	Base,
-	Transparent
-};
+	class Chunk;
 
-class ChunkMesh
-{
-public:
-	ChunkMesh(Chunk& chunk);
-	~ChunkMesh();
+	using Vertex = uint32_t;
 
-	void draw(ChunkMeshPart part);
-	void generateMesh();
-	
-	bool isGenerated() const { return m_generated; }
+	enum class ChunkMeshPart
+	{
+		Base,
+		Transparent
+	};
 
-private:
-	GLuint m_vao;
-	GLuint m_vbo;
+	class ChunkMesh
+	{
+	public:
+		ChunkMesh(Chunk &chunk);
+		~ChunkMesh();
 
-	std::vector<Vertex> m_vertices;
-	std::vector<Vertex> m_base_vertices;
-	std::vector<Vertex> m_transparent_vertices;
-	unsigned int m_base_vertex_count;
-	unsigned int m_transparent_vertex_count;
+		void draw(ChunkMeshPart part);
+		void generateMesh();
 
-	bool m_generated;
+		bool isGenerated() const { return m_generated; }
 
-	bool canAddFace(BlockData block_data, Block adjacent_block);
-	void addFace(const unsigned int *face, Block block_type, glm::ivec2 uvs, glm::ivec3 pos);
-	void addSprite(glm::ivec2 uvs, glm::ivec3 pos);
-};
+	private:
+		GLuint m_vao;
+		GLuint m_vbo;
+
+		std::vector<Vertex> m_vertices;
+		std::vector<Vertex> m_base_vertices;
+		std::vector<Vertex> m_transparent_vertices;
+		unsigned int m_base_vertex_count;
+		unsigned int m_transparent_vertex_count;
+
+		bool m_generated;
+
+		bool canAddFace(BlockData block_data, Block adjacent_block);
+		void addFace(const unsigned int *face, Block block_type, glm::ivec2 uvs, glm::ivec3 pos);
+		void addSprite(glm::ivec2 uvs, glm::ivec3 pos);
+	};
+}

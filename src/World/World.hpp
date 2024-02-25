@@ -11,49 +11,53 @@
 #include "Chunk.hpp"
 #include "ChunkMesh.hpp"
 
-struct KeyHash
+namespace mc
 {
-	std::size_t operator()(const glm::ivec2& k) const
+	struct ChunkPositionHash
 	{
-		return std::hash<int>()(k.x) ^ std::hash<int>()(k.y);
-	}
-	bool operator() (const glm::ivec2& lhs, const glm::ivec2& rhs) const
+		std::size_t operator()(const glm::ivec2 &k) const
+		{
+			return std::hash<int>()(k.x) ^ std::hash<int>()(k.y);
+		}
+		bool operator()(const glm::ivec2 &lhs, const glm::ivec2 &rhs) const
+		{
+			return lhs.x == rhs.x && lhs.y == rhs.y;
+		}
+	};
+
+	using ChunkMap = std::unordered_map<glm::ivec2, std::unique_ptr<Chunk>, ChunkPositionHash, ChunkPositionHash>;
+	using ChunksVisitedMap = std::unordered_map<glm::ivec2, bool, ChunkPositionHash, ChunkPositionHash>;
+
+	class World
 	{
-		return lhs.x == rhs.x && lhs.y == rhs.y;
-	}
-};
+	public:
+		World(Camera &camera, Renderer &renderer);
+		~World() = default;
 
-using ChunkMap = std::unordered_map<glm::ivec2, std::unique_ptr<Chunk>, KeyHash, KeyHash>;
-using ChunksVisitedMap = std::unordered_map<glm::ivec2, bool, KeyHash, KeyHash>;
+		void update();
+		void updateChunks();
+		void generateChunks(const glm::ivec2 &start, glm::ivec2 current, int distance);
+		void render();
 
-class World
-{
-public:
-	World(Camera& camera, Renderer& renderer);
-	~World() = default;
+		Block getBlock(const glm::ivec3 &position);
+		const ChunkMap &getChunks() const;
+		std::thread &getUpdateThread() { return m_update_thread; }
 
-	void update();
-	void updateChunks();
-	Chunk* generateChunks(const glm::ivec2& start, glm::ivec2 current, int distance);
-	void render();
+	private:
+		void renderChunks(ChunkMeshPart part);
 
-	const ChunkMap& getChunks() const;
-	std::thread& getUpdateThread() { return m_update_thread; }
+		Camera &m_camera;
+		Renderer &m_renderer;
 
-private:
-	void renderChunks(ChunkMeshPart part);
+		Texture m_block_texture;
+		Shader m_chunk_shader;
+		ChunkMap m_chunks;
+		ChunksVisitedMap m_chunks_visited;
 
-	Camera& m_camera;
-	Renderer& m_renderer;
+		std::thread m_update_thread;
 
-	Texture m_block_texture;
-	Shader m_chunk_shader;
-	ChunkMap m_chunks;
-	ChunksVisitedMap m_chunks_visited;
-
-	std::thread m_update_thread;
-
-	const int RENDER_DISTANCE = 10;
-	const float CHUNK_UPDATE_MOVE_THRESHOLD = 20.0f;
-	glm::vec3 m_old_position;
-};
+		const int RENDER_DISTANCE = 10;
+		const float CHUNK_UPDATE_MOVE_THRESHOLD = 20.0f;
+		glm::vec3 m_old_position;
+	};
+}
