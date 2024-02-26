@@ -1,6 +1,7 @@
 #include "Chunk.hpp"
 
 #include <iostream>
+#include <glm/glm.hpp>
 
 #include "World.hpp"
 #include "world_utils.hpp"
@@ -37,6 +38,18 @@ namespace mc
 	void Chunk::generateMesh()
 	{
 		m_mesh = std::make_unique<ChunkMesh>(*this);
+	}
+
+	void Chunk::draw(ChunkMeshPart part) const
+	{
+		if (m_mesh == nullptr)
+			return;
+		if (m_mesh->isGenerated() == false)
+			m_mesh->generateMesh();
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, getWorldPosition());
+		m_world.getChunkShader().setUniform("model", model);
+		m_mesh->draw(part);
 	}
 
 	int Chunk::getHeight(int x, int z) const

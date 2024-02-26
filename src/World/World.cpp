@@ -1,6 +1,7 @@
 #include "World.hpp"
 
 #include "world_utils.hpp"
+#include "../Utils/std_utils.hpp"
 
 namespace mc
 {
@@ -50,9 +51,7 @@ namespace mc
 	void World::updateChunks()
 	{
 		// Get the chunk position of the camera
-		glm::ivec2 cam_chunk_pos = glm::ivec2(
-			round(m_camera.getPosition().x / CHUNK_SIZE),
-			round(m_camera.getPosition().z / CHUNK_SIZE));
+		glm::ivec2 cam_chunk_pos = toChunkPosition(m_camera.getPosition());
 
 		generateChunks(cam_chunk_pos, cam_chunk_pos, RENDER_DISTANCE);
 		m_chunks_visited.clear();
@@ -66,7 +65,7 @@ namespace mc
 
 		m_chunks_visited[current] = true;
 
-		if (m_chunks.find(current) == m_chunks.end())
+		if (!mapContains(m_chunks, current))
 		{
 			auto chunk = std::make_unique<Chunk>(*this, current);
 			chunk.get()->generateMesh();
@@ -93,17 +92,9 @@ namespace mc
 
 	void World::renderChunks(ChunkMeshPart part)
 	{
-		for (auto it = m_chunks.begin(); it != m_chunks.end(); it++)
+		for (auto& [position, chunk] : m_chunks)
 		{
-			Chunk *chunk = it->second.get();
-			if (chunk->getMesh() == nullptr)
-				continue;
-			if (chunk->getMesh()->isGenerated() == false)
-				chunk->getMesh()->generateMesh();
-			glm::mat4 model = glm::mat4(1.0f);
-			model = glm::translate(model, chunk->getWorldPosition());
-			m_chunk_shader.setUniform("model", model);
-			chunk->getMesh()->draw(part);
+			chunk->draw(part);
 		}
 	}
 }

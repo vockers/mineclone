@@ -13,6 +13,7 @@ namespace mc
 	constexpr int CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
 
 	class ChunkMesh;
+	enum class ChunkMeshPart;
 
 	class Chunk
 	{
@@ -28,6 +29,7 @@ namespace mc
 		glm::vec3 getWorldPosition() const { return glm::vec3(m_position.x * CHUNK_SIZE, 0, m_position.y * CHUNK_SIZE); }
 
 		void generateMesh();
+		void draw(ChunkMeshPart part) const;
 
 	private:
 		World& m_world;

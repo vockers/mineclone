@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <glm/glm.hpp>
 #include <SDL2/SDL.h>
 
@@ -8,7 +9,7 @@ namespace mc
 	class Window
 	{
 	public:
-		Window(int width, int height, const char *title);
+		Window(int width, int height, const std::string& title);
 		~Window();
 
 		void display();

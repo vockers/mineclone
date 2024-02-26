@@ -24,12 +24,9 @@ namespace mc
 
 	glm::ivec2 toChunkPosition(const glm::ivec3& position)
 	{
-		int x = position.x;
-		int z = position.z;
-
 		return glm::ivec2(
-			x < 0 ? ((x - CHUNK_SIZE) / CHUNK_SIZE) : (x / CHUNK_SIZE),
-        	z < 0 ? ((z - CHUNK_SIZE) / CHUNK_SIZE) : (z / CHUNK_SIZE)
+			position.x / CHUNK_SIZE,
+			position.z / CHUNK_SIZE
 		);
 	}
 }

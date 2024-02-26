@@ -42,6 +42,7 @@ namespace mc
 		Block getBlock(const glm::ivec3 &position);
 		const ChunkMap &getChunks() const;
 		std::thread &getUpdateThread() { return m_update_thread; }
+		const Shader& getChunkShader() const { return m_chunk_shader; }
 
 	private:
 		void renderChunks(ChunkMeshPart part);
