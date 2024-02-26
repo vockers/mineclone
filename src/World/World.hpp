@@ -7,7 +7,7 @@
 
 #include "../Camera.hpp"
 #include "../Renderer/Renderer.hpp"
-#include "../Renderer/Texture.hpp"
+#include "../Renderer/TextureAtlas.hpp"
 #include "Chunk.hpp"
 #include "ChunkMesh.hpp"
 

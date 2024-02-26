@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+#include <vector>
 #include <GL/glew.h>
 
 namespace mc
@@ -7,13 +9,18 @@ namespace mc
 	class Texture
 	{
 	public:
-		Texture() = default;
+		Texture();
 		~Texture();
 
-		void loadFromFile(const char *path);
+		void loadFromFile(const std::string& path);
 		void bind();
 
-	private:
+	protected:
+		void generate();	
+
 		GLuint m_id;
+		GLenum m_format;
+		int m_width, m_height;
+		std::vector<unsigned char> m_data;
 	};
 }
