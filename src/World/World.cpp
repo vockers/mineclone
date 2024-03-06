@@ -10,7 +10,6 @@ namespace mc
 		m_block_texture.loadFromFile("assets/textures/blocks.png");
 		m_chunk_shader.loadFromFile("assets/shaders/chunk_vertex.glsl", "assets/shaders/chunk_fragment.glsl");
 
-		m_chunks.reserve(RENDER_DISTANCE * RENDER_DISTANCE * 2);
 		m_chunks_visited.reserve(RENDER_DISTANCE * RENDER_DISTANCE * 2);
 		m_old_position = m_camera.getPosition();
 
@@ -22,16 +21,11 @@ namespace mc
 	Block World::getBlock(const glm::ivec3 &position)
 	{
 		glm::ivec2 chunk_position = toChunkPosition(position);
-		auto itr = m_chunks.find(chunk_position);
-		if (itr == m_chunks.end()) {
+		// auto itr = m_chunks.find(chunk_position);
+		// if (itr == m_chunks.end()) {
 			return Block::Air;
-		}
-		return itr->second->qGetBlock(toLocalVoxelPosition(position));
-	}
-
-	const ChunkMap &World::getChunks() const
-	{
-		return m_chunks;
+		// }
+		// return itr->second->qGetBlock(toLocalVoxelPosition(position));
 	}
 
 	void World::update()
@@ -65,12 +59,7 @@ namespace mc
 
 		m_chunks_visited[current] = true;
 
-		if (!mapContains(m_chunks, current))
-		{
-			auto chunk = std::make_unique<Chunk>(*this, current);
-			chunk.get()->generateMesh();
-			m_chunks[current] = std::move(chunk);
-		}
+		m_chunks.addChunk(current);
 
 		generateChunks(start, glm::ivec2(current.x + 1, current.y), distance);
 		generateChunks(start, glm::ivec2(current.x - 1, current.y), distance);
@@ -92,7 +81,7 @@ namespace mc
 
 	void World::renderChunks(ChunkMeshPart part)
 	{
-		for (auto& [position, chunk] : m_chunks)
+		for (auto& [position, chunk] : m_chunks.getChunks())
 		{
 			chunk->draw(part);
 		}

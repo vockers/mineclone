@@ -7,7 +7,7 @@
 
 namespace mc
 {
-	class World;
+	class ChunkMap;
 
 	constexpr int CHUNK_SIZE = 32;
 	constexpr int CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
@@ -18,7 +18,7 @@ namespace mc
 	class Chunk
 	{
 	public:
-		Chunk(World& world, glm::ivec2 position);
+		Chunk(ChunkMap& map, glm::ivec2 position);
 		~Chunk();
 
 		Block qGetBlock(const glm::ivec3& pos) const;
@@ -32,7 +32,7 @@ namespace mc
 		void draw(ChunkMeshPart part) const;
 
 	private:
-		World& m_world;
+		ChunkMap& m_map;
 		int getHeight(int x, int z) const;
 		void generateTerrain();
 		void generateDecorations();

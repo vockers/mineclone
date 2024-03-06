@@ -192,6 +192,8 @@ namespace mc
 	{
 		if (adjacent_block == Block::Air)
 			return true;
+		else if (block_data.type == BlockType::Flora)
+			return true;
 
 		BlockData adjacent_block_data = BlockDatabase::get().getData(adjacent_block);
 		if (adjacent_block_data.type == BlockType::Solid)

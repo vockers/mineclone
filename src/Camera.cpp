@@ -1,5 +1,6 @@
 #include "Camera.hpp"
 
+#include <GL/glew.h>
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -12,7 +13,8 @@ namespace mc
 																			   m_pitch(pitch),
 																			   m_speed(40.0f),
 																			   m_sensitivity(8.0f),
-																			   m_first_mouse(true)
+																			   m_first_mouse(true),
+																			   m_wireframe_mode(false)
 	{
 		updateVectors();
 	}
@@ -45,6 +47,15 @@ namespace mc
 
 	void Camera::processKeyboard(float delta_time, Input &input)
 	{
+		if (input.isKeyPressed(SDL_SCANCODE_R))
+		{
+			m_wireframe_mode = !m_wireframe_mode;
+			if (m_wireframe_mode)
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			else
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+
 		float velocity = m_speed * delta_time;
 		if (input.isKeyPressed(SDL_SCANCODE_W))
 			m_position += m_front * velocity;

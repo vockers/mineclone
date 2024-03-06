@@ -1,8 +1,6 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <memory>
-#include <unordered_map>
 #include <thread>
 
 #include "../Camera.hpp"
@@ -10,24 +8,10 @@
 #include "../Renderer/TextureAtlas.hpp"
 #include "Chunk.hpp"
 #include "ChunkMesh.hpp"
+#include "ChunkMap.hpp"
 
 namespace mc
 {
-	struct ChunkPositionHash
-	{
-		std::size_t operator()(const glm::ivec2 &k) const
-		{
-			return std::hash<int>()(k.x) ^ std::hash<int>()(k.y);
-		}
-		bool operator()(const glm::ivec2 &lhs, const glm::ivec2 &rhs) const
-		{
-			return lhs.x == rhs.x && lhs.y == rhs.y;
-		}
-	};
-
-	using ChunkMap = std::unordered_map<glm::ivec2, std::unique_ptr<Chunk>, ChunkPositionHash, ChunkPositionHash>;
-	using ChunksVisitedMap = std::unordered_map<glm::ivec2, bool, ChunkPositionHash, ChunkPositionHash>;
-
 	class World
 	{
 	public:
@@ -35,12 +19,10 @@ namespace mc
 		~World() = default;
 
 		void update();
-		void updateChunks();
-		void generateChunks(const glm::ivec2 &start, glm::ivec2 current, int distance);
+		void updateChunks(); void generateChunks(const glm::ivec2 &start, glm::ivec2 current, int distance);
 		void render();
 
 		Block getBlock(const glm::ivec3 &position);
-		const ChunkMap &getChunks() const;
 		std::thread &getUpdateThread() { return m_update_thread; }
 		const Shader& getChunkShader() const { return m_chunk_shader; }
 

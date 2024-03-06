@@ -37,7 +37,7 @@ namespace mc
 			BlockMeshType::Default};
 		m_data[static_cast<int>(Block::Leaves)] = {
 			{{4, 14}, {4, 14}, {4, 14}, {4, 14}, {4, 14}, {4, 14}},
-			BlockType::Solid,
+			BlockType::Flora,
 			BlockMeshType::Default};
 		m_data[static_cast<int>(Block::TallGrass)] = {
 			{{2, 12}, {2, 12}, {2, 12}, {2, 12}, {2, 12}, {2, 12}},

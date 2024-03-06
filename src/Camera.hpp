@@ -36,6 +36,8 @@ namespace mc
 		float m_mouse_last_x;
 		float m_mouse_last_y;
 		bool m_first_mouse;
+		
+		bool m_wireframe_mode;
 
 		void updateVectors();
 		void processKeyboard(float delta_time, Input &input);
