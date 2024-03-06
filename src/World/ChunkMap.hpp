@@ -7,6 +7,8 @@
 
 namespace mc
 {
+	class World;
+
 	struct ChunkPositionHash
 	{
 		std::size_t operator()(const glm::ivec2 &k) const
@@ -24,13 +26,15 @@ namespace mc
     class ChunkMap
     {
 	public:
-        ChunkMap();
+        ChunkMap(World& world);
         
 		void addChunk(const glm::ivec2 &position);
 
 		const ChunkHashMap &getChunks() const { return m_chunks; };
 
     private:
+		World& m_world;
+
 		ChunkHashMap m_chunks;
     };
 }

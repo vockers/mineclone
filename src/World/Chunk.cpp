@@ -3,13 +3,16 @@
 #include <glm/glm.hpp>
 
 #include "ChunkMap.hpp"
+#include "World.hpp"
 #include "world_utils.hpp"
 #include "ChunkMesh.hpp"
 #include "../Utils/PerlinNoise.hpp"
 
 namespace mc
 {
-	Chunk::Chunk(ChunkMap &map, glm::ivec2 position) : m_map(map),
+	Chunk::Chunk(World& world, ChunkMap &map, glm::ivec2 position) : 
+													  m_world(world),
+													  m_map(map),
 													  m_position(position),
 													  m_mesh(nullptr)
 	{

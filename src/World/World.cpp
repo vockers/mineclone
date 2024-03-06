@@ -5,7 +5,7 @@
 
 namespace mc
 {
-	World::World(Camera &camera, Renderer &renderer) : m_camera(camera), m_renderer(renderer)
+	World::World(Camera &camera, Renderer &renderer) : m_camera(camera), m_renderer(renderer), m_chunks(*this)
 	{
 		m_block_texture.loadFromFile("assets/textures/blocks.png");
 		m_chunk_shader.loadFromFile("assets/shaders/chunk_vertex.glsl", "assets/shaders/chunk_fragment.glsl");
@@ -20,7 +20,7 @@ namespace mc
 
 	Block World::getBlock(const glm::ivec3 &position)
 	{
-		glm::ivec2 chunk_position = toChunkPosition(position);
+		// glm::ivec2 chunk_position = toChunkPosition(position);
 		// auto itr = m_chunks.find(chunk_position);
 		// if (itr == m_chunks.end()) {
 			return Block::Air;
