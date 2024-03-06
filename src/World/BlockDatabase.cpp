@@ -43,6 +43,14 @@ namespace mc
 			{{2, 12}, {2, 12}, {2, 12}, {2, 12}, {2, 12}, {2, 12}},
 			BlockType::Flora,
 			BlockMeshType::Sprite};
+		m_data[static_cast<int>(Block::Rose)] = {
+			{{0, 12}, {0, 12}, {0, 12}, {0, 12}, {0, 12}, {0, 12}},
+			BlockType::Flora,
+			BlockMeshType::Sprite};
+		m_data[static_cast<int>(Block::YellowFlower)] = {
+			{{1, 12}, {1, 12}, {1, 12}, {1, 12}, {1, 12}, {1, 12}},
+			BlockType::Flora,
+			BlockMeshType::Sprite};
 		m_data[static_cast<int>(Block::Dirt)] = {
 			{{2, 15}, {2, 15}, {2, 15}, {2, 15}, {2, 15}, {2, 15}},
 			BlockType::Solid,

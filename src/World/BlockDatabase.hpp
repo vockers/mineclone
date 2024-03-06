@@ -38,6 +38,8 @@ namespace mc
 		Wood,
 		Leaves,
 		TallGrass,
+		Rose,
+		YellowFlower,
 		Dirt,
 	};
 

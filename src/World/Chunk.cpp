@@ -107,6 +107,13 @@ namespace mc
 						generateTree(x, max_height + 1, z);
 					else if (rand() % 100 > 90)
 						m_blocks[x][max_height + 1][z] = Block::TallGrass;
+					else if (rand() % 100 > 97)
+					{
+						if (rand() % 3 > 1)
+							m_blocks[x][max_height + 1][z] = Block::YellowFlower;
+						else
+							m_blocks[x][max_height + 1][z] = Block::Rose;
+					}
 				}
 			}
 		}
