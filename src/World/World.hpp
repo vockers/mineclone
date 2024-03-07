@@ -22,7 +22,7 @@ namespace mc
 		void updateChunks(); void generateChunks(const glm::ivec2 &start, glm::ivec2 current, int distance);
 		void render();
 
-		Block getBlock(const glm::ivec3 &position);
+		BlockID getBlock(const glm::ivec3 &position);
 		std::thread &getUpdateThread() { return m_update_thread; }
 		const Shader& getChunkShader() const { return m_chunk_shader; }
 

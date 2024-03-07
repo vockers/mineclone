@@ -24,16 +24,16 @@ namespace mc
 	{
 	}
 
-	Block Chunk::qGetBlock(const glm::ivec3 &pos) const
+	BlockID Chunk::qGetBlock(const glm::ivec3 &pos) const
 	{
 		return m_blocks[pos.x][pos.y][pos.z];
 	}
 
-	Block Chunk::getBlock(const glm::ivec3 &pos) const
+	BlockID Chunk::getBlock(const glm::ivec3 &pos) const
 	{
 		if (pos.z < 0 || pos.z >= CHUNK_SIZE || pos.x < 0 || pos.x >= CHUNK_SIZE || pos.y < 0 || pos.y >= CHUNK_SIZE)
 			// return m_world.getBlock(toGlobalBlockPosition(m_position, pos));
-			return Block::Air;
+			return BlockID::Air;
 		return qGetBlock(pos);
 	}
 
@@ -72,24 +72,24 @@ namespace mc
 				int stone_height = max_height - 3;
 				for (int y = 0; y < CHUNK_SIZE; y++)
 				{
-					Block block = Block::Air;
+					BlockID block = BlockID::Air;
 					if (y < stone_height)
-						block = Block::Stone;
+						block = BlockID::Stone;
 					else if (y < max_height)
-						block = Block::Dirt;
+						block = BlockID::Dirt;
 					else if (y == max_height)
 					{
 						if (max_height < OCEAN_LEVEL + 1)
-							block = Block::Sand;
+							block = BlockID::Sand;
 						else
-							block = Block::Grass;
+							block = BlockID::Grass;
 					}
 					else if (y >= MIN_HEIGHT && y < OCEAN_LEVEL)
 					{
-						block = Block::Water;
+						block = BlockID::Water;
 					}
 					else
-						block = Block::Air;
+						block = BlockID::Air;
 					m_blocks[x][y][z] = block;
 				}
 			}
@@ -108,13 +108,13 @@ namespace mc
 					if (rand() % 125 > 123)
 						generateTree(x, max_height + 1, z);
 					else if (rand() % 100 > 90)
-						m_blocks[x][max_height + 1][z] = Block::TallGrass;
+						m_blocks[x][max_height + 1][z] = BlockID::TallGrass;
 					else if (rand() % 100 > 97)
 					{
 						if (rand() % 3 > 1)
-							m_blocks[x][max_height + 1][z] = Block::YellowFlower;
+							m_blocks[x][max_height + 1][z] = BlockID::YellowFlower;
 						else
-							m_blocks[x][max_height + 1][z] = Block::Rose;
+							m_blocks[x][max_height + 1][z] = BlockID::Rose;
 					}
 				}
 			}
@@ -123,12 +123,12 @@ namespace mc
 
 	void Chunk::generateTree(int x, int y, int z)
 	{
-		m_blocks[x][y][z] = Block::Wood;
+		m_blocks[x][y][z] = BlockID::Wood;
 		int height = (rand() % 3) + 3;
 
 		for (int i = 0; i < height; i++)
 		{
-			m_blocks[x][y + i][z] = Block::Wood;
+			m_blocks[x][y + i][z] = BlockID::Wood;
 		}
 
 		int leave_height = (rand() % 2) + 2;
@@ -147,7 +147,7 @@ namespace mc
 						!(corner && yy == (y + height + 1) && rand() % 100 > 40))
 					{
 						if (yy < CHUNK_SIZE - 1 && xx < CHUNK_SIZE - 1 && zz < CHUNK_SIZE - 1 && xx > 0 && zz > 0 && yy > 0)
-							m_blocks[xx][yy][zz] = Block::Leaves;
+							m_blocks[xx][yy][zz] = BlockID::Leaves;
 					}
 				}
 			}
@@ -167,7 +167,7 @@ namespace mc
 					if (!(corner && yy == (y + height + leave_height) && rand() % 100 > 20))
 					{
 						if (yy < CHUNK_SIZE - 1 && xx < CHUNK_SIZE - 1 && zz < CHUNK_SIZE - 1 && xx > 0 && zz > 0 && yy > 0)
-							m_blocks[xx][yy][zz] = Block::Leaves;
+							m_blocks[xx][yy][zz] = BlockID::Leaves;
 					}
 				}
 			}

@@ -18,12 +18,12 @@ namespace mc
 		m_update_thread = std::thread(&World::update, this);
 	}
 
-	Block World::getBlock(const glm::ivec3 &position)
+	BlockID World::getBlock(const glm::ivec3 &position)
 	{
 		// glm::ivec2 chunk_position = toChunkPosition(position);
 		// auto itr = m_chunks.find(chunk_position);
 		// if (itr == m_chunks.end()) {
-			return Block::Air;
+			return BlockID::Air;
 		// }
 		// return itr->second->qGetBlock(toLocalVoxelPosition(position));
 	}

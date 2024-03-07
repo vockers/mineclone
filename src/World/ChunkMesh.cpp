@@ -97,10 +97,10 @@ namespace mc
 			int y = i / (CHUNK_SIZE * CHUNK_SIZE);
 			int z = (i / CHUNK_SIZE) % CHUNK_SIZE;
 
-			Block block_type = chunk.getBlock(glm::ivec3(x, y, z));
+			BlockID block_type = chunk.getBlock(glm::ivec3(x, y, z));
 			BlockData block_data = BlockDatabase::get().getData(block_type);
 
-			if (block_type == Block::Air)
+			if (block_type == BlockID::Air)
 				continue;
 
 			switch (block_data.meshType)
@@ -110,7 +110,7 @@ namespace mc
 				break;
 			case BlockMeshType::Default:
 			case BlockMeshType::Liquid:
-				if (block_type != Block::Water)
+				if (block_type != BlockID::Water)
 				{
 					// Front face
 					if (canAddFace(block_data, chunk.getBlock(glm::ivec3(x, y, z + 1))))
@@ -188,9 +188,9 @@ namespace mc
 		m_generated = true;
 	}
 
-	bool ChunkMesh::canAddFace(BlockData block_data, Block adjacent_block)
+	bool ChunkMesh::canAddFace(BlockData block_data, BlockID adjacent_block)
 	{
-		if (adjacent_block == Block::Air)
+		if (adjacent_block == BlockID::Air)
 			return true;
 		else if (block_data.type == BlockType::Flora)
 			return true;
@@ -203,7 +203,7 @@ namespace mc
 		return true;
 	}
 
-	void ChunkMesh::addFace(const unsigned int *face, Block block_type, glm::ivec2 uvs, glm::ivec3 pos)
+	void ChunkMesh::addFace(const unsigned int *face, BlockID block_type, glm::ivec2 uvs, glm::ivec3 pos)
 	{
 		for (int i = 0; i < 6; i++)
 		{
@@ -215,9 +215,9 @@ namespace mc
 			vertex ^= face[i * 4 + 3] << 11;
 			vertex ^= (FACE_UVS[i * 2] + uvs.x) << 6;
 			vertex ^= (FACE_UVS[i * 2 + 1] + uvs.y) << 1;
-			if (block_type == Block::Water || block_type == Block::Leaves)
+			if (block_type == BlockID::Water || block_type == BlockID::Leaves)
 			{
-				if (block_type == Block::Water)
+				if (block_type == BlockID::Water)
 					vertex ^= 1;
 
 				m_transparent_vertices.push_back(vertex);

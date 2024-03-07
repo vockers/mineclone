@@ -21,8 +21,8 @@ namespace mc
 		Chunk(World& world, ChunkMap& map, glm::ivec2 position);
 		~Chunk();
 
-		Block qGetBlock(const glm::ivec3& pos) const;
-		Block getBlock(const glm::ivec3& pos) const;
+		BlockID qGetBlock(const glm::ivec3& pos) const;
+		BlockID getBlock(const glm::ivec3& pos) const;
 
 		ChunkMesh *getMesh() const { return m_mesh.get(); }
 		glm::ivec2 getPosition() const { return m_position; }
@@ -41,7 +41,7 @@ namespace mc
 		void generateTree(int x, int y, int z);
 
 		glm::ivec2 m_position;
-		Block m_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
+		BlockID m_blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
 		std::unique_ptr<ChunkMesh> m_mesh;
 
 		static const int OCEAN_LEVEL = 12;
