@@ -5,12 +5,11 @@
 #include <GL/glew.h>
 
 #include "BlockDatabase.hpp"
+#include "../Renderer/Mesh.hpp"
 
 namespace mc
 {
 	class Chunk;
-
-	using Vertex = uint32_t;
 
 	enum class ChunkMeshPart
 	{
@@ -21,8 +20,9 @@ namespace mc
 	class ChunkMesh
 	{
 	public:
+		using Vertex = Mesh::Vertex;
+
 		ChunkMesh(Chunk &chunk);
-		~ChunkMesh();
 
 		void draw(ChunkMeshPart part);
 		void generateMesh();
@@ -30,14 +30,8 @@ namespace mc
 		bool isGenerated() const { return m_generated; }
 
 	private:
-		GLuint m_vao;
-		GLuint m_vbo;
-
-		std::vector<Vertex> m_vertices;
-		std::vector<Vertex> m_base_vertices;
-		std::vector<Vertex> m_transparent_vertices;
-		unsigned int m_base_vertex_count;
-		unsigned int m_transparent_vertex_count;
+		Mesh m_base_mesh;
+		Mesh m_transparent_mesh;
 
 		bool m_generated;
 

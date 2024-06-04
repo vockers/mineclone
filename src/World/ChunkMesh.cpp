@@ -135,28 +135,19 @@ namespace mc
 				break;
 			}
 		}
-		m_vertices.reserve(m_base_vertices.size() + m_transparent_vertices.size());
-		m_vertices.insert(m_vertices.end(), m_base_vertices.begin(), m_base_vertices.end());
-		m_vertices.insert(m_vertices.end(), m_transparent_vertices.begin(), m_transparent_vertices.end());
-	}
-
-	ChunkMesh::~ChunkMesh()
-	{
-		glDeleteBuffers(1, &m_vbo);
-		glDeleteVertexArrays(1, &m_vao);
 	}
 
 	void ChunkMesh::draw(ChunkMeshPart part)
 	{
 		if (!m_generated)
 			return;
-		glBindVertexArray(m_vao);
+		// glBindVertexArray(m_vao);
 		if (part == ChunkMeshPart::Base)
-			glDrawArrays(GL_TRIANGLES, 0, m_base_vertex_count);
+			m_base_mesh.draw();
 		else
 		{
 			glDisable(GL_CULL_FACE);
-			glDrawArrays(GL_TRIANGLES, m_base_vertex_count, m_transparent_vertex_count);
+			m_transparent_mesh.draw();
 			glEnable(GL_CULL_FACE);
 		}
 		glBindVertexArray(0);
@@ -164,26 +155,8 @@ namespace mc
 
 	void ChunkMesh::generateMesh()
 	{
-		glGenVertexArrays(1, &m_vao);
-		glGenBuffers(1, &m_vbo);
-
-		glBindVertexArray(m_vao);
-
-		glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-		glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), m_vertices.data(), GL_STATIC_DRAW);
-
-		glVertexAttribIPointer(0, 1, GL_UNSIGNED_INT, sizeof(Vertex), (void *)0);
-		glEnableVertexAttribArray(0);
-
-		glBindVertexArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-		m_base_vertex_count = m_base_vertices.size();
-		m_transparent_vertex_count = m_transparent_vertices.size();
-
-		m_base_vertices.clear();
-		m_transparent_vertices.clear();
-		m_vertices.clear();
+		m_base_mesh.generate();
+		m_transparent_mesh.generate();
 
 		m_generated = true;
 	}
@@ -220,10 +193,10 @@ namespace mc
 				if (block_type == BlockID::Water)
 					vertex ^= 1;
 
-				m_transparent_vertices.push_back(vertex);
+				m_transparent_mesh.addVertex(vertex);
 			}
 			else
-				m_base_vertices.push_back(vertex);
+				m_base_mesh.addVertex(vertex);
 		}
 	}
 
@@ -238,7 +211,7 @@ namespace mc
 			vertex ^= SPRITE_VERTICES[i * 4 + 3] << 11;
 			vertex ^= (FACE_UVS[i * 2] + uvs.x) << 6;
 			vertex ^= (FACE_UVS[i * 2 + 1] + uvs.y) << 1;
-			m_transparent_vertices.push_back(vertex);
+			m_transparent_mesh.addVertex(vertex);
 		}
 
 		for (int i = 0; i < 6; i++)
@@ -250,7 +223,7 @@ namespace mc
 			vertex ^= SPRITE_VERTICES[(i + 6) * 4 + 3] << 11;
 			vertex ^= (FACE_UVS[i * 2] + uvs.x) << 6;
 			vertex ^= (FACE_UVS[i * 2 + 1] + uvs.y) << 1;
-			m_transparent_vertices.push_back(vertex);
+			m_transparent_mesh.addVertex(vertex);
 		}
 	}
 };
