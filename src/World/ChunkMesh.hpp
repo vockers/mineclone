@@ -36,7 +36,7 @@ namespace mc
 		bool m_generated;
 
 		bool canAddFace(BlockData block_data, BlockID adjacent_block);
-		void addFace(const unsigned int *face, BlockID block_type, glm::ivec2 uvs, glm::ivec3 pos);
+		void addFace(const unsigned int *face, BlockType block_type, glm::ivec2 uvs, glm::ivec3 pos);
 		void addSprite(glm::ivec2 uvs, glm::ivec3 pos);
 	};
 }

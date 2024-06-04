@@ -24,20 +24,30 @@ namespace mc
 	{
 	}
 
+    BlockID Chunk::qGetBlock(int x, int y, int z) const
+	{
+		return m_blocks[x][y][z];
+	}
+
 	BlockID Chunk::qGetBlock(const glm::ivec3 &pos) const
 	{
-		return m_blocks[pos.x][pos.y][pos.z];
+		return qGetBlock(pos.x, pos.y, pos.z);
 	}
 
-	BlockID Chunk::getBlock(const glm::ivec3 &pos) const
+    BlockID Chunk::getBlock(int x, int y, int z) const
 	{
-		if (pos.z < 0 || pos.z >= CHUNK_SIZE || pos.x < 0 || pos.x >= CHUNK_SIZE || pos.y < 0 || pos.y >= CHUNK_SIZE)
-			// return m_world.getBlock(toGlobalBlockPosition(m_position, pos));
+		if (z < 0 || z >= CHUNK_SIZE || x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_SIZE)
 			return BlockID::Air;
-		return qGetBlock(pos);
+
+		return qGetBlock(x, y, z);
 	}
 
-	void Chunk::generateMesh()
+    BlockID Chunk::getBlock(const glm::ivec3 &pos) const
+	{
+		return getBlock(pos.x, pos.y, pos.z);
+	}
+
+    void Chunk::generateMesh()
 	{
 		m_mesh = std::make_unique<ChunkMesh>(*this);
 	}
@@ -56,7 +66,7 @@ namespace mc
 
 	int Chunk::getHeight(int x, int z) const
 	{
-		const static siv::PerlinNoise::seed_type seed = 123456u;
+		const static siv::PerlinNoise::seed_type seed = World::SEED;
 		const static siv::PerlinNoise perlin{seed};
 
 		return glm::clamp((int)(perlin.octave2D_01((x + (float)m_position.x * CHUNK_SIZE) * 0.02f, (z + (float)m_position.y * CHUNK_SIZE) * 0.02f, 4, 0.35f) * CHUNK_SIZE), MIN_HEIGHT, MAX_HEIGHT);

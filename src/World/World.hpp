@@ -26,6 +26,8 @@ namespace mc
 		std::thread &getUpdateThread() { return m_update_thread; }
 		const Shader& getChunkShader() const { return m_chunk_shader; }
 
+		static const unsigned int SEED = 12345U;
+
 	private:
 		void renderChunks(ChunkMeshPart part);
 

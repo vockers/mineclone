@@ -21,7 +21,9 @@ namespace mc
 		Chunk(World& world, ChunkMap& map, glm::ivec2 position);
 		~Chunk();
 
+		BlockID qGetBlock(int x, int y, int z) const;
 		BlockID qGetBlock(const glm::ivec3& pos) const;
+		BlockID getBlock(int x, int y, int z) const;;
 		BlockID getBlock(const glm::ivec3& pos) const;
 
 		ChunkMesh *getMesh() const { return m_mesh.get(); }
