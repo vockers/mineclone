@@ -29,7 +29,7 @@ namespace mc
 		static const unsigned int SEED = 12345U;
 
 	private:
-		void renderChunks(ChunkMeshPart part);
+		void renderChunks(ChunkMesh::Part part);
 
 		Camera &m_camera;
 		Renderer &m_renderer;

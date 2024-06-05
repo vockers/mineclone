@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "BlockDatabase.hpp"
+#include "ChunkMesh.hpp"
 
 namespace mc
 {
@@ -12,8 +13,6 @@ namespace mc
 
 	class World;
 	class ChunkMap;
-	class ChunkMesh;
-	enum class ChunkMeshPart;
 
 	class Chunk
 	{
@@ -31,7 +30,7 @@ namespace mc
 		glm::vec3 getWorldPosition() const { return glm::vec3(m_position.x * CHUNK_SIZE, 0, m_position.y * CHUNK_SIZE); }
 
 		void generateMesh();
-		void draw(ChunkMeshPart part) const;
+		void draw(ChunkMesh::Part part) const;
 
 	private:
 		World& m_world;

@@ -141,12 +141,12 @@ namespace mc
 		}
 	}
 
-	void ChunkMesh::draw(ChunkMeshPart part)
+	void ChunkMesh::draw(Part part)
 	{
 		if (!m_generated)
 			return;
 
-		if (part == ChunkMeshPart::Base)
+		if (part == Part::Base)
 			m_base_mesh.draw();
 		else
 		{

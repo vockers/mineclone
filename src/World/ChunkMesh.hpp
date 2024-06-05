@@ -11,20 +11,20 @@ namespace mc
 {
 	class Chunk;
 
-	enum class ChunkMeshPart
-	{
-		Base,
-		Transparent
-	};
-
 	class ChunkMesh
 	{
 	public:
 		using Vertex = Mesh::Vertex;
 
+		enum class Part
+		{
+			Base,
+			Transparent
+		};
+
 		ChunkMesh(Chunk &chunk);
 
-		void draw(ChunkMeshPart part);
+		void draw(Part part);
 		void generateMesh();
 
 		bool isGenerated() const { return m_generated; }

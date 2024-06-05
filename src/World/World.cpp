@@ -75,11 +75,11 @@ namespace mc
 		m_chunk_shader.setUniform("view", m_camera.getViewMatrix());
 
 		// Render solid geometry before transparent geometry
-		renderChunks(ChunkMeshPart::Base);
-		renderChunks(ChunkMeshPart::Transparent);
+		renderChunks(ChunkMesh::Part::Base);
+		renderChunks(ChunkMesh::Part::Transparent);
 	}
 
-	void World::renderChunks(ChunkMeshPart part)
+	void World::renderChunks(ChunkMesh::Part part)
 	{
 		for (auto& [position, chunk] : m_chunks.getChunks())
 		{

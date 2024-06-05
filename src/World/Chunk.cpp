@@ -52,7 +52,7 @@ namespace mc
 		m_mesh = std::make_unique<ChunkMesh>(*this);
 	}
 
-	void Chunk::draw(ChunkMeshPart part) const
+	void Chunk::draw(ChunkMesh::Part part) const
 	{
 		if (m_mesh == nullptr)
 			return;
