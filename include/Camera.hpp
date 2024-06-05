@@ -41,6 +41,6 @@ namespace mc
 
 		void updateVectors();
 		void processKeyboard(float delta_time, Input &input);
-		void processMouse(float delta_time, Input &input);
+		void processMouse(Input &input);
 	};
 }

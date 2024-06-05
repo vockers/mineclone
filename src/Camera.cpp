@@ -26,7 +26,7 @@ namespace mc
 	void Camera::update(float delta_time, Input &input)
 	{
 		processKeyboard(delta_time, input);
-		processMouse(delta_time, input);
+		processMouse(input);
 	}
 
 	glm::mat4 Camera::getViewMatrix() const
@@ -67,7 +67,7 @@ namespace mc
 			m_position += m_right * velocity;
 	}
 
-	void Camera::processMouse(float delta_time, Input &input)
+	void Camera::processMouse(Input &input)
 	{
 		if (input.isCursorVisible())
 			return;
