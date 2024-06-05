@@ -1,8 +1,8 @@
-#include "ChunkMap.hpp"
+#include "World/ChunkMap.hpp"
 
 #include <memory>
 
-#include "../Utils/std_utils.hpp"
+#include "Utils/std_utils.hpp"
 
 namespace mc
 {

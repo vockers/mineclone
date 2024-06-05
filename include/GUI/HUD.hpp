@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Font.hpp"
-#include "Text.hpp"
-#include "GUI.hpp"
+#include "GUI/Font.hpp"
+#include "GUI/Text.hpp"
+#include "GUI/GUI.hpp"
 
 namespace mc
 {

@@ -1,4 +1,4 @@
-#include "HUD.hpp"
+#include "GUI/HUD.hpp"
 
 #include <iostream>
 #include <iomanip>

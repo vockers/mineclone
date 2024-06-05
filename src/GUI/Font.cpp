@@ -1,4 +1,4 @@
-#include "Font.hpp"
+#include "GUI/Font.hpp"
 
 #include <iostream>
 #include <algorithm>

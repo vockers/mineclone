@@ -1,8 +1,8 @@
-#include "Cubemap.hpp"
+#include "Renderer/Cubemap.hpp"
 
 #include <iostream>
 
-#include "../Utils/stb_image.h"
+#include "Utils/stb_image.h"
 
 namespace mc
 {

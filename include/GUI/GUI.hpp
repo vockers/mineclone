@@ -3,8 +3,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include "../Renderer/Renderer.hpp"
-#include "../Renderer/Shader.hpp"
+#include "Renderer/Renderer.hpp"
+#include "Renderer/Shader.hpp"
 
 namespace mc
 {

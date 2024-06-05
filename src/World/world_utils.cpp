@@ -1,6 +1,6 @@
-#include "world_utils.hpp"
+#include "World/world_utils.hpp"
 
-#include "Chunk.hpp"
+#include "World/Chunk.hpp"
 
 namespace mc
 {

@@ -1,9 +1,9 @@
-#include "TextureAtlas.hpp"
+#include "Renderer/TextureAtlas.hpp"
 
 #include <iostream>
 #include <filesystem>
 
-#include "../Utils/stb_image.h"
+#include "Utils/stb_image.h"
 
 void mc::TextureAtlas::loadFromDirectory(const std::string &path, int width, int height)
 {

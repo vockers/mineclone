@@ -1,12 +1,12 @@
-#include "Chunk.hpp"
+#include "World/Chunk.hpp"
 
 #include <glm/glm.hpp>
 
-#include "ChunkMap.hpp"
-#include "World.hpp"
-#include "world_utils.hpp"
-#include "ChunkMesh.hpp"
-#include "../Utils/PerlinNoise.hpp"
+#include "World/ChunkMap.hpp"
+#include "World/World.hpp"
+#include "World/world_utils.hpp"
+#include "World/ChunkMesh.hpp"
+#include "Utils/PerlinNoise.hpp"
 
 namespace mc
 {

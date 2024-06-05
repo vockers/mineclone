@@ -1,7 +1,7 @@
-#include "World.hpp"
+#include "World/World.hpp"
 
-#include "world_utils.hpp"
-#include "../Utils/std_utils.hpp"
+#include "World/world_utils.hpp"
+#include "Utils/std_utils.hpp"
 
 namespace mc
 {

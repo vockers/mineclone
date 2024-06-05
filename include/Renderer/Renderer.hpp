@@ -2,10 +2,10 @@
 
 #include <GL/glew.h>
 
-#include "../Window.hpp"
-#include "../Camera.hpp"
-#include "Shader.hpp"
-#include "Cubemap.hpp"
+#include "Window.hpp"
+#include "Camera.hpp"
+#include "Renderer/Shader.hpp"
+#include "Renderer/Cubemap.hpp"
 
 namespace mc
 {

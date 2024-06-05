@@ -1,8 +1,8 @@
-#include "Texture.hpp"
+#include "Renderer/Texture.hpp"
 
 #include <iostream>
 
-#include "../Utils/stb_image.h"
+#include "Utils/stb_image.h"
 
 namespace mc
 {

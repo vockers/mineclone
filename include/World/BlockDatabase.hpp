@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Block.hpp"
+#include "World/Block.hpp"
 
 namespace mc
 {
