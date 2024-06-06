@@ -37,7 +37,7 @@ namespace mc
 
     BlockID Chunk::getBlock(int x, int y, int z) const
 	{
-		if (z < 0 || z >= CHUNK_SIZE || x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_SIZE)
+		if (!checkBounds(x, y, z))
 			return BlockID::Air;
 
 		return qGetBlock(x, y, z);
@@ -55,7 +55,7 @@ namespace mc
 
 	void Chunk::setBlock(int x, int y, int z, BlockID block)
 	{
-		if (z < 0 || z >= CHUNK_SIZE || x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_SIZE)
+		if (!checkBounds(x, y, z))
 			return;
 		
 		qSetBlock(x, y, z, block);
@@ -81,6 +81,11 @@ namespace mc
 		const static siv::PerlinNoise perlin{seed};
 
 		return glm::clamp((int)(perlin.octave2D_01((x + (float)m_position.x * CHUNK_SIZE) * 0.02f, (z + (float)m_position.y * CHUNK_SIZE) * 0.02f, 4, 0.35f) * CHUNK_SIZE), MIN_HEIGHT, MAX_HEIGHT);
+	}
+
+	bool Chunk::checkBounds(int x, int y, int z) const
+	{
+		return x >= 0 && x < CHUNK_SIZE && y >= 0 && y < CHUNK_SIZE && z >= 0 && z < CHUNK_SIZE;
 	}
 
 	void Chunk::generateTerrain()

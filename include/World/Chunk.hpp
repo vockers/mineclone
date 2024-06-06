@@ -39,6 +39,7 @@ namespace mc
 		ChunkMap& m_map;
 
 		int getHeight(int x, int z) const;
+		bool checkBounds(int x, int y, int z) const;
 		void generateTerrain();
 		void generateDecorations();
 		void generateTree(int x, int y, int z);
