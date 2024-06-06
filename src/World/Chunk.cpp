@@ -1,5 +1,6 @@
 #include "World/Chunk.hpp"
 
+#include <iostream>
 #include <glm/glm.hpp>
 
 #include "World/ChunkMap.hpp"
@@ -26,7 +27,7 @@ namespace mc
 
     BlockID Chunk::qGetBlock(int x, int y, int z) const
 	{
-		return m_blocks[x][y][z];
+		return m_blocks[z * CHUNK_SIZE * CHUNK_SIZE + y * CHUNK_SIZE + x];
 	}
 
 	BlockID Chunk::qGetBlock(const glm::ivec3 &pos) const
@@ -49,7 +50,15 @@ namespace mc
 
     void Chunk::qSetBlock(int x, int y, int z, BlockID block)
 	{
-		m_blocks[x][y][z] = block;
+		m_blocks[z * CHUNK_SIZE * CHUNK_SIZE + y * CHUNK_SIZE + x] = block;
+	}
+
+	void Chunk::setBlock(int x, int y, int z, BlockID block)
+	{
+		if (z < 0 || z >= CHUNK_SIZE || x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_SIZE)
+			return;
+		
+		qSetBlock(x, y, z, block);
 	}
 
     void Chunk::generateMesh()
@@ -135,12 +144,12 @@ namespace mc
 
 	void Chunk::generateTree(int x, int y, int z)
 	{
-		qSetBlock(x, y, z, BlockID::Wood);
+		setBlock(x, y, z, BlockID::Wood);
 		int height = (rand() % 3) + 3;
 
 		for (int i = 0; i < height; i++)
 		{
-			qSetBlock(x, y + i, z, BlockID::Wood);
+			setBlock(x, y + i, z, BlockID::Wood);
 		}
 
 		int leave_height = (rand() % 2) + 2;
@@ -157,10 +166,7 @@ namespace mc
 
 					if ((!(xx == x && zz == z) || yy > (y + height)) &&
 						!(corner && yy == (y + height + 1) && rand() % 100 > 40))
-					{
-						if (yy < CHUNK_SIZE - 1 && xx < CHUNK_SIZE - 1 && zz < CHUNK_SIZE - 1 && xx > 0 && zz > 0 && yy > 0)
-							qSetBlock(xx, yy, zz, BlockID::Leaves);
-					}
+						setBlock(xx, yy, zz, BlockID::Leaves);
 				}
 			}
 		}
@@ -177,10 +183,7 @@ namespace mc
 					bool corner = c == 2;
 
 					if (!(corner && yy == (y + height + leave_height) && rand() % 100 > 20))
-					{
-						if (yy < CHUNK_SIZE - 1 && xx < CHUNK_SIZE - 1 && zz < CHUNK_SIZE - 1 && xx > 0 && zz > 0 && yy > 0)
-							qSetBlock(xx, yy, zz, BlockID::Leaves);
-					}
+						setBlock(xx, yy, zz, BlockID::Leaves);
 				}
 			}
 		}
