@@ -27,7 +27,7 @@ namespace mc
 
     BlockID Chunk::qGetBlock(int x, int y, int z) const
 	{
-		return m_blocks[z * CHUNK_SIZE * CHUNK_SIZE + y * CHUNK_SIZE + x];
+		return m_blocks[z * CHUNK_AREA + y * CHUNK_SIZE + x];
 	}
 
 	BlockID Chunk::qGetBlock(const glm::ivec3 &pos) const
@@ -50,7 +50,7 @@ namespace mc
 
     void Chunk::qSetBlock(int x, int y, int z, BlockID block)
 	{
-		m_blocks[z * CHUNK_SIZE * CHUNK_SIZE + y * CHUNK_SIZE + x] = block;
+		m_blocks[z * CHUNK_AREA + y * CHUNK_SIZE + x] = block;
 	}
 
 	void Chunk::setBlock(int x, int y, int z, BlockID block)
@@ -66,21 +66,22 @@ namespace mc
 		m_mesh = std::make_unique<ChunkMesh>(*this);
 	}
 
-    void Chunk::draw(ChunkMesh::Part part) const {
-        if (m_mesh == nullptr) return;
-        if (m_mesh->isGenerated() == false) m_mesh->generateMesh();
+    void Chunk::draw(ChunkMesh::Part part) const
+	{
+        if (m_mesh == nullptr)
+			return;
+        if (m_mesh->isGenerated() == false)
+			m_mesh->generateMesh();
+
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, getWorldPosition());
         m_world.getChunkShader().setUniform("model", model);
         m_mesh->draw(part);
 	}
 
-	int Chunk::getHeight(int x, int z) const
+	int Chunk::getTopBlock(int x, int z) const
 	{
-		const static siv::PerlinNoise::seed_type seed = World::SEED;
-		const static siv::PerlinNoise perlin{seed};
-
-		return glm::clamp((int)(perlin.octave2D_01((x + (float)m_position.x * CHUNK_SIZE) * 0.02f, (z + (float)m_position.y * CHUNK_SIZE) * 0.02f, 4, 0.35f) * CHUNK_SIZE), MIN_HEIGHT, MAX_HEIGHT);
+		return m_top_blocks[z * CHUNK_SIZE + x];
 	}
 
 	bool Chunk::checkBounds(int x, int y, int z) const
@@ -90,11 +91,15 @@ namespace mc
 
 	void Chunk::generateTerrain()
 	{
+		const static siv::PerlinNoise::seed_type seed = World::SEED;
+		const static siv::PerlinNoise perlin{seed};
+
 		for (int z = 0; z < CHUNK_SIZE; z++)
 		{
 			for (int x = 0; x < CHUNK_SIZE; x++)
 			{
-				int max_height = getHeight(x, z);
+				int max_height = glm::clamp((int)(perlin.octave2D_01((x + (float)m_position.x * CHUNK_SIZE) * 0.02f, (z + (float)m_position.y * CHUNK_SIZE) * 0.02f, 4, 0.35f) * CHUNK_SIZE), MIN_HEIGHT, MAX_HEIGHT);
+				m_top_blocks[z * CHUNK_SIZE + x] = max_height;
 				int stone_height = max_height - 3;
 				for (int y = 0; y < CHUNK_SIZE; y++)
 				{
@@ -128,7 +133,7 @@ namespace mc
 		{
 			for (int x = 0; x < CHUNK_SIZE; x++)
 			{
-				int max_height = getHeight(x, z);
+				int max_height = getTopBlock(x, z);
 				if (max_height > OCEAN_LEVEL + 2)
 				{
 					if (rand() % 125 > 123)

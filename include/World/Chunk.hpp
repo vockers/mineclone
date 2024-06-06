@@ -3,12 +3,13 @@
 #include <glm/glm.hpp>
 #include <memory>
 
-#include "BlockDatabase.hpp"
-#include "ChunkMesh.hpp"
+#include "World/BlockDatabase.hpp"
+#include "World/ChunkMesh.hpp"
 
 namespace mc
 {
 	constexpr int CHUNK_SIZE = 32;
+	constexpr int CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE;
 	constexpr int CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
 
 	class World;
@@ -38,7 +39,7 @@ namespace mc
 		World& m_world;
 		ChunkMap& m_map;
 
-		int getHeight(int x, int z) const;
+		int getTopBlock(int x, int z) const;
 		bool checkBounds(int x, int y, int z) const;
 		void generateTerrain();
 		void generateDecorations();
@@ -46,6 +47,7 @@ namespace mc
 
 		glm::ivec2 m_position;
 		BlockID m_blocks[CHUNK_VOLUME];
+		int m_top_blocks[CHUNK_AREA];
 		std::unique_ptr<ChunkMesh> m_mesh;
 
 		static const int OCEAN_LEVEL = 12;
