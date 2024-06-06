@@ -24,6 +24,7 @@ namespace mc
 		BlockID qGetBlock(const glm::ivec3& pos) const;
 		BlockID getBlock(int x, int y, int z) const;;
 		BlockID getBlock(const glm::ivec3& pos) const;
+		void qSetBlock(int x, int y, int z, BlockID block);
 
 		ChunkMesh *getMesh() const { return m_mesh.get(); }
 		glm::ivec2 getPosition() const { return m_position; }

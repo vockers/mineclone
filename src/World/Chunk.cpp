@@ -47,21 +47,23 @@ namespace mc
 		return getBlock(pos.x, pos.y, pos.z);
 	}
 
+    void Chunk::qSetBlock(int x, int y, int z, BlockID block)
+	{
+		m_blocks[x][y][z] = block;
+	}
+
     void Chunk::generateMesh()
 	{
 		m_mesh = std::make_unique<ChunkMesh>(*this);
 	}
 
-	void Chunk::draw(ChunkMesh::Part part) const
-	{
-		if (m_mesh == nullptr)
-			return;
-		if (m_mesh->isGenerated() == false)
-			m_mesh->generateMesh();
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, getWorldPosition());
-		m_world.getChunkShader().setUniform("model", model);
-		m_mesh->draw(part);
+    void Chunk::draw(ChunkMesh::Part part) const {
+        if (m_mesh == nullptr) return;
+        if (m_mesh->isGenerated() == false) m_mesh->generateMesh();
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, getWorldPosition());
+        m_world.getChunkShader().setUniform("model", model);
+        m_mesh->draw(part);
 	}
 
 	int Chunk::getHeight(int x, int z) const
@@ -100,7 +102,7 @@ namespace mc
 					}
 					else
 						block = BlockID::Air;
-					m_blocks[x][y][z] = block;
+					qSetBlock(x, y, z, block);
 				}
 			}
 		}
@@ -118,13 +120,13 @@ namespace mc
 					if (rand() % 125 > 123)
 						generateTree(x, max_height + 1, z);
 					else if (rand() % 100 > 90)
-						m_blocks[x][max_height + 1][z] = BlockID::TallGrass;
+						qSetBlock(x, max_height + 1, z, BlockID::TallGrass);
 					else if (rand() % 100 > 97)
 					{
 						if (rand() % 3 > 1)
-							m_blocks[x][max_height + 1][z] = BlockID::YellowFlower;
+							qSetBlock(x, max_height + 1, z, BlockID::YellowFlower);
 						else
-							m_blocks[x][max_height + 1][z] = BlockID::Rose;
+							qSetBlock(x, max_height + 1, z, BlockID::Rose);
 					}
 				}
 			}
@@ -133,12 +135,12 @@ namespace mc
 
 	void Chunk::generateTree(int x, int y, int z)
 	{
-		m_blocks[x][y][z] = BlockID::Wood;
+		qSetBlock(x, y, z, BlockID::Wood);
 		int height = (rand() % 3) + 3;
 
 		for (int i = 0; i < height; i++)
 		{
-			m_blocks[x][y + i][z] = BlockID::Wood;
+			qSetBlock(x, y + i, z, BlockID::Wood);
 		}
 
 		int leave_height = (rand() % 2) + 2;
@@ -157,7 +159,7 @@ namespace mc
 						!(corner && yy == (y + height + 1) && rand() % 100 > 40))
 					{
 						if (yy < CHUNK_SIZE - 1 && xx < CHUNK_SIZE - 1 && zz < CHUNK_SIZE - 1 && xx > 0 && zz > 0 && yy > 0)
-							m_blocks[xx][yy][zz] = BlockID::Leaves;
+							qSetBlock(xx, yy, zz, BlockID::Leaves);
 					}
 				}
 			}
@@ -177,7 +179,7 @@ namespace mc
 					if (!(corner && yy == (y + height + leave_height) && rand() % 100 > 20))
 					{
 						if (yy < CHUNK_SIZE - 1 && xx < CHUNK_SIZE - 1 && zz < CHUNK_SIZE - 1 && xx > 0 && zz > 0 && yy > 0)
-							m_blocks[xx][yy][zz] = BlockID::Leaves;
+							qSetBlock(xx, yy, zz, BlockID::Leaves);
 					}
 				}
 			}
