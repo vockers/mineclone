@@ -30,6 +30,7 @@ namespace mc
 		ChunkMesh *getMesh() const { return m_mesh.get(); }
 		glm::ivec2 getPosition() const { return m_position; }
 		glm::vec3 getWorldPosition() const { return glm::vec3(m_position.x * CHUNK_SIZE, 0, m_position.y * CHUNK_SIZE); }
+    int getSectionCount() const { return m_sections.size(); }
 
 		void generateMesh();
 		void draw(ChunkMesh::Part part) const;
@@ -55,6 +56,7 @@ namespace mc
 
 		static const int OCEAN_LEVEL = 12;
 		static const int MIN_HEIGHT = 2;
-		static const int MAX_HEIGHT = 32;
+		static const int MAX_HEIGHT = 105;
+    static const int MOUNTAIN_HEIGHT = 45;
 	};
 };

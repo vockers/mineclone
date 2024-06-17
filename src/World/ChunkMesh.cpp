@@ -96,7 +96,7 @@ namespace mc
 
 	ChunkMesh::ChunkMesh(Chunk &chunk) : m_generated(false)
 	{
-		for (int i = 0; i < CHUNK_VOLUME; i++)
+		for (int i = 0; i < CHUNK_SIZE * CHUNK_SIZE * (CHUNK_SIZE * chunk.getSectionCount()); i++)
 		{
 			int x = i % CHUNK_SIZE;
 			int y = i / (CHUNK_SIZE * CHUNK_SIZE);
@@ -181,10 +181,10 @@ namespace mc
 	{
 		for (int i = 0; i < 6; i++)
 		{
-			// Compress the vertex data into a single 32-bit integer
+			// Compress the vertex data into a single 64-bit integer
 			Vertex vertex = 0;
 			vertex ^= (face[i * 4] + pos.x) << 26;
-			vertex ^= (face[i * 4 + 1] + pos.y) << 20;
+			vertex ^= (Vertex)(face[i * 4 + 1] + pos.y) << 52;
 			vertex ^= (face[i * 4 + 2] + pos.z) << 14;
 			vertex ^= face[i * 4 + 3] << 11;
 			vertex ^= (FACE_UVS[i * 2] + uvs.x) << 6;

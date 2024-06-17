@@ -28,7 +28,7 @@ namespace mc
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
         glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), m_vertices.data(), GL_STATIC_DRAW);
 
-        glVertexAttribIPointer(0, 1, GL_UNSIGNED_INT, sizeof(Vertex), (void *)0);
+        glVertexAttribIPointer(0, 2, GL_UNSIGNED_INT, sizeof(Vertex), (void *)0);
         glEnableVertexAttribArray(0);
 
         glBindVertexArray(0);

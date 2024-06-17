@@ -82,13 +82,19 @@ namespace mc
 		{
 			for (int x = 0; x < CHUNK_SIZE; x++)
 			{
-				int max_height = glm::clamp((int)(perlin.octave2D_01((x + (float)m_position.x * CHUNK_SIZE) * 0.02f, (z + (float)m_position.y * CHUNK_SIZE) * 0.02f, 4, 0.35f) * CHUNK_SIZE), MIN_HEIGHT, MAX_HEIGHT);
+				int max_height = glm::clamp((int)(perlin.octave2D_01((x + (float)m_position.x * CHUNK_SIZE) * 0.0045f, (z + (float)m_position.y * CHUNK_SIZE) * 0.0045f, 4, 0.7f) * MAX_HEIGHT), MIN_HEIGHT, MAX_HEIGHT);
 				m_top_blocks[z * CHUNK_SIZE + x] = max_height;
 				int stone_height = max_height - 3;
-				for (int y = 0; y < CHUNK_SIZE; y++)
+				for (int y = 0; y <= 255; y++)
 				{
 					BlockID block = BlockID::Air;
-					if (y < stone_height)
+          bool is_stone = y < stone_height;
+          if (y > MOUNTAIN_HEIGHT && y <= max_height)
+          {
+            if (perlin.octave2D_01((x + (float)m_position.x * CHUNK_SIZE) * 0.005f, (z + (float)m_position.y * CHUNK_SIZE) * 0.005f, 4, 0.9f) > 0.5f)
+              is_stone = true;
+          }
+					if (is_stone)
 						block = BlockID::Stone;
 					else if (y < max_height)
 						block = BlockID::Dirt;
@@ -103,8 +109,6 @@ namespace mc
 					{
 						block = BlockID::Water;
 					}
-					else
-						block = BlockID::Air;
 					setBlock(x, y, z, block);
 				}
 			}
@@ -118,7 +122,7 @@ namespace mc
 			for (int x = 0; x < CHUNK_SIZE; x++)
 			{
 				int max_height = getTopBlock(x, z);
-				if (max_height > OCEAN_LEVEL + 2)
+				if (max_height > OCEAN_LEVEL + 2 && max_height < MOUNTAIN_HEIGHT)
 				{
 					if (rand() % 125 > 123)
 						generateTree(x, max_height + 1, z);

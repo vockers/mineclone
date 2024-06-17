@@ -8,7 +8,7 @@ namespace mc
     class Mesh
     {
     public:
-	    using Vertex = uint32_t;
+	    using Vertex = uint64_t;
 
         ~Mesh();
 
