@@ -2,9 +2,11 @@
 
 #include <glm/glm.hpp>
 #include <memory>
+#include <vector>
 
 #include "World/BlockDatabase.hpp"
 #include "World/ChunkMesh.hpp"
+#include "World/ChunkSection.hpp"
 
 namespace mc
 {
@@ -21,11 +23,8 @@ namespace mc
 		Chunk(World& world, ChunkMap& map, glm::ivec2 position);
 		~Chunk();
 
-		BlockID qGetBlock(int x, int y, int z) const;
-		BlockID qGetBlock(const glm::ivec3& pos) const;
 		BlockID getBlock(int x, int y, int z) const;;
 		BlockID getBlock(const glm::ivec3& pos) const;
-		void qSetBlock(int x, int y, int z, BlockID block);
 		void setBlock(int x, int y, int z, BlockID block);
 
 		ChunkMesh *getMesh() const { return m_mesh.get(); }
@@ -44,9 +43,13 @@ namespace mc
 		void generateTerrain();
 		void generateDecorations();
 		void generateTree(int x, int y, int z);
+		void addSections(size_t index);
+		const ChunkSection& getSection(size_t index) const;
+		ChunkSection& getSection(size_t index);
 
 		glm::ivec2 m_position;
-		BlockID m_blocks[CHUNK_VOLUME];
+		// BlockID m_blocks[CHUNK_VOLUME];
+		std::vector<ChunkSection> m_sections;
 		int m_top_blocks[CHUNK_AREA];
 		std::unique_ptr<ChunkMesh> m_mesh;
 

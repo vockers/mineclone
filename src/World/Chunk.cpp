@@ -25,22 +25,12 @@ namespace mc
 	{
 	}
 
-    BlockID Chunk::qGetBlock(int x, int y, int z) const
-	{
-		return m_blocks[z * CHUNK_AREA + y * CHUNK_SIZE + x];
-	}
-
-	BlockID Chunk::qGetBlock(const glm::ivec3 &pos) const
-	{
-		return qGetBlock(pos.x, pos.y, pos.z);
-	}
-
     BlockID Chunk::getBlock(int x, int y, int z) const
 	{
-		if (!checkBounds(x, y, z))
+		size_t section_index = y / CHUNK_SIZE;
+		if (section_index >= m_sections.size())
 			return BlockID::Air;
-
-		return qGetBlock(x, y, z);
+		return getSection(section_index).getBlock(x, y % CHUNK_SIZE, z);
 	}
 
     BlockID Chunk::getBlock(const glm::ivec3 &pos) const
@@ -48,17 +38,11 @@ namespace mc
 		return getBlock(pos.x, pos.y, pos.z);
 	}
 
-    void Chunk::qSetBlock(int x, int y, int z, BlockID block)
-	{
-		m_blocks[z * CHUNK_AREA + y * CHUNK_SIZE + x] = block;
-	}
-
 	void Chunk::setBlock(int x, int y, int z, BlockID block)
 	{
-		if (!checkBounds(x, y, z))
-			return;
-		
-		qSetBlock(x, y, z, block);
+		int section_index = y / CHUNK_SIZE;
+		addSections(section_index);
+		getSection(section_index).setBlock(x, y % CHUNK_SIZE, z, block);
 	}
 
     void Chunk::generateMesh()
@@ -121,7 +105,7 @@ namespace mc
 					}
 					else
 						block = BlockID::Air;
-					qSetBlock(x, y, z, block);
+					setBlock(x, y, z, block);
 				}
 			}
 		}
@@ -139,13 +123,13 @@ namespace mc
 					if (rand() % 125 > 123)
 						generateTree(x, max_height + 1, z);
 					else if (rand() % 100 > 90)
-						qSetBlock(x, max_height + 1, z, BlockID::TallGrass);
+						setBlock(x, max_height + 1, z, BlockID::TallGrass);
 					else if (rand() % 100 > 97)
 					{
 						if (rand() % 3 > 1)
-							qSetBlock(x, max_height + 1, z, BlockID::YellowFlower);
+							setBlock(x, max_height + 1, z, BlockID::YellowFlower);
 						else
-							qSetBlock(x, max_height + 1, z, BlockID::Rose);
+							setBlock(x, max_height + 1, z, BlockID::Rose);
 					}
 				}
 			}
@@ -197,5 +181,21 @@ namespace mc
 				}
 			}
 		}
+	}
+
+	void Chunk::addSections(size_t index)
+	{
+		while (index >= m_sections.size())
+			m_sections.push_back(ChunkSection());
+	}
+
+	const ChunkSection& Chunk::getSection(size_t index) const
+	{
+		return m_sections[index];
+	}
+
+	ChunkSection& Chunk::getSection(size_t index)
+	{
+		return m_sections[index];
 	}
 }
