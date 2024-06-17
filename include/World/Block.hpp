@@ -40,6 +40,7 @@ namespace mc
 		TallGrass,
 		Rose,
 		YellowFlower,
+    Snow,
 		Dirt,
 	};
 

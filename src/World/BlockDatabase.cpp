@@ -51,6 +51,10 @@ namespace mc
 			{{1, 12}, {1, 12}, {1, 12}, {1, 12}, {1, 12}, {1, 12}},
 			BlockType::Flora,
 			BlockMeshType::Sprite};
+		m_data[static_cast<int>(BlockID::Snow)] = {
+			{{3, 13}, {3, 13}, {3, 13}, {3, 13}, {3, 13}, {3, 13}},
+			BlockType::Solid,
+			BlockMeshType::Default};
 		m_data[static_cast<int>(BlockID::Dirt)] = {
 			{{2, 15}, {2, 15}, {2, 15}, {2, 15}, {2, 15}, {2, 15}},
 			BlockType::Solid,

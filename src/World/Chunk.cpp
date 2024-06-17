@@ -88,13 +88,14 @@ namespace mc
 				for (int y = 0; y <= 255; y++)
 				{
 					BlockID block = BlockID::Air;
-          bool is_stone = y < stone_height;
           if (y > MOUNTAIN_HEIGHT && y <= max_height)
           {
-            if (perlin.octave2D_01((x + (float)m_position.x * CHUNK_SIZE) * 0.005f, (z + (float)m_position.y * CHUNK_SIZE) * 0.005f, 4, 0.9f) > 0.5f)
-              is_stone = true;
+            if (y == max_height && y >= SNOW_HEIGHT)
+              block = BlockID::Snow;
+            else
+						  block = BlockID::Stone;
           }
-					if (is_stone)
+          else if (y < stone_height)
 						block = BlockID::Stone;
 					else if (y < max_height)
 						block = BlockID::Dirt;
