@@ -54,11 +54,5 @@ class Chunk
     std::vector<ChunkSection> m_sections;
     int m_top_blocks[CHUNK_AREA];
     std::unique_ptr<ChunkMesh> m_mesh;
-
-    static const int OCEAN_LEVEL = 12;
-    static const int MIN_HEIGHT = 2;
-    static const int MAX_HEIGHT = 105;
-    static const int MOUNTAIN_HEIGHT = 45;
-    static const int SNOW_HEIGHT = 60;
 };
 } // namespace mc

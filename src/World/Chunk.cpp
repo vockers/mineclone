@@ -2,9 +2,9 @@
 
 #include <glm/glm.hpp>
 
-#include "Utils/PerlinNoise.hpp"
 #include "World/ChunkMap.hpp"
 #include "World/ChunkMesh.hpp"
+#include "World/TerrainGenerator.hpp"
 #include "World/World.hpp"
 #include "World/world_utils.hpp"
 
@@ -60,23 +60,15 @@ bool Chunk::checkBounds(int x, int y, int z) const
 
 void Chunk::generateTerrain()
 {
-    const static siv::PerlinNoise::seed_type seed = World::SEED;
-    const static siv::PerlinNoise perlin{seed};
-
     for (int z = 0; z < CHUNK_SIZE; z++) {
         for (int x = 0; x < CHUNK_SIZE; x++) {
-            int max_height =
-                glm::clamp((int)(perlin.octave2D_01(
-                                     (x + (float)m_position.x * CHUNK_SIZE) * 0.0045f,
-                                     (z + (float)m_position.y * CHUNK_SIZE) * 0.0045f, 4, 0.7f) *
-                                 MAX_HEIGHT),
-                           MIN_HEIGHT, MAX_HEIGHT);
+            int max_height = TerrainGenerator::getHeight(x + m_position.x * CHUNK_SIZE, z + m_position.y * CHUNK_SIZE);
             m_top_blocks[z * CHUNK_SIZE + x] = max_height;
-            int check_height = max_height < OCEAN_LEVEL ? OCEAN_LEVEL : max_height;
+            int check_height = max_height < TerrainGenerator::OCEAN_LEVEL ? TerrainGenerator::OCEAN_LEVEL : max_height;
             for (int y = 0; y <= check_height; y++) {
                 BlockID block = BlockID::Air;
-                if (y > MOUNTAIN_HEIGHT && y <= max_height) {
-                    if (y == max_height && y >= SNOW_HEIGHT)
+                if (y > TerrainGenerator::MOUNTAIN_HEIGHT && y <= max_height) {
+                    if (y == max_height && y >= TerrainGenerator::SNOW_HEIGHT)
                         block = BlockID::Snow;
                     else
                         block = BlockID::Stone;
@@ -85,11 +77,11 @@ void Chunk::generateTerrain()
                 else if (y < max_height)
                     block = BlockID::Dirt;
                 else if (y == max_height) {
-                    if (max_height < OCEAN_LEVEL + 1)
+                    if (max_height < TerrainGenerator::OCEAN_LEVEL + 1)
                         block = BlockID::Sand;
                     else
                         block = BlockID::Grass;
-                } else if (y >= MIN_HEIGHT && y < OCEAN_LEVEL) {
+                } else if (y >= TerrainGenerator::MIN_HEIGHT && y < TerrainGenerator::OCEAN_LEVEL) {
                     block = BlockID::Water;
                 }
                 setBlock(x, y, z, block);
@@ -103,7 +95,7 @@ void Chunk::generateDecorations()
     for (int z = 0; z < CHUNK_SIZE; z++) {
         for (int x = 0; x < CHUNK_SIZE; x++) {
             int max_height = getTopBlock(x, z);
-            if (max_height > OCEAN_LEVEL + 2 && max_height < MOUNTAIN_HEIGHT) {
+            if (max_height > TerrainGenerator::OCEAN_LEVEL + 2 && max_height < TerrainGenerator::MOUNTAIN_HEIGHT) {
                 if (rand() % 125 > 123)
                     generateTree(x, max_height + 1, z);
                 else if (rand() % 100 > 90)
