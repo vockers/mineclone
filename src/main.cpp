@@ -2,9 +2,9 @@
 
 int main()
 {
-	mc::Game game;
+    mc::Game game;
 
-	game.run();
+    game.run();
 
-	return 0;
+    return 0;
 }

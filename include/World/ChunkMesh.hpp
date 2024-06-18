@@ -1,42 +1,38 @@
 #pragma once
 
-#include <vector>
-#include <glm/glm.hpp>
 #include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <vector>
 
-#include "BlockDatabase.hpp"
 #include "../Renderer/Mesh.hpp"
+#include "BlockDatabase.hpp"
 
 namespace mc
 {
-	class Chunk;
+class Chunk;
 
-	class ChunkMesh
-	{
-	public:
-		using Vertex = Mesh::Vertex;
+class ChunkMesh
+{
+  public:
+    using Vertex = Mesh::Vertex;
 
-		enum class Part
-		{
-			Base,
-			Transparent
-		};
+    enum class Part { Base, Transparent };
 
-		ChunkMesh(Chunk &chunk);
+    ChunkMesh(Chunk &chunk);
 
-		void draw(Part part);
-		void generateMesh();
+    void draw(Part part);
+    void generateMesh();
 
-		bool isGenerated() const { return m_generated; }
+    bool isGenerated() const { return m_generated; }
 
-	private:
-		Mesh m_base_mesh;
-		Mesh m_transparent_mesh;
+  private:
+    Mesh m_base_mesh;
+    Mesh m_transparent_mesh;
 
-		bool m_generated;
+    bool m_generated;
 
-		bool canAddFace(BlockData block_data, BlockID adjacent_block);
-		void addFace(const unsigned int *face, BlockType block_type, glm::ivec2 uvs, glm::ivec3 pos);
-		void addSprite(glm::ivec2 uvs, glm::ivec3 pos);
-	};
-}
+    bool canAddFace(BlockData block_data, BlockID adjacent_block);
+    void addFace(const unsigned int *face, BlockType block_type, glm::ivec2 uvs, glm::ivec3 pos);
+    void addSprite(glm::ivec2 uvs, glm::ivec3 pos);
+};
+} // namespace mc

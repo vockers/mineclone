@@ -6,17 +6,17 @@
 
 namespace mc
 {
-	class BlockDatabase
-	{
-	public:
-		static BlockDatabase &get();
+class BlockDatabase
+{
+  public:
+    static BlockDatabase &get();
 
-		const BlockData &getData(BlockID type) const;
+    const BlockData &getData(BlockID type) const;
 
-	private:
-		BlockDatabase();
-		~BlockDatabase() = default;
+  private:
+    BlockDatabase();
+    ~BlockDatabase() = default;
 
-		BlockData m_data[BLOCK_COUNT];
-	};
-}
+    BlockData m_data[BLOCK_COUNT];
+};
+} // namespace mc

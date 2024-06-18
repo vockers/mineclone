@@ -6,25 +6,25 @@
 
 namespace mc
 {
-	class Input
-	{
-	public:
-		Input(Window &window);
-		~Input();
+class Input
+{
+  public:
+    Input(Window &window);
+    ~Input();
 
-		void update();
+    void update();
 
-		glm::ivec2 getMousePosition() const;
-		bool isKeyPressed(SDL_Scancode key) const;
+    glm::ivec2 getMousePosition() const;
+    bool isKeyPressed(SDL_Scancode key) const;
 
-		void centerMousePosition();
+    void centerMousePosition();
 
-		bool isCursorVisible() const { return m_cursor_visible; }
+    bool isCursorVisible() const { return m_cursor_visible; }
 
-	private:
-		Window &m_window;
+  private:
+    Window &m_window;
 
-		bool m_cursor_visible;
-		const Uint8 *m_keystate;
-	};
-}
+    bool m_cursor_visible;
+    const Uint8 *m_keystate;
+};
+} // namespace mc
