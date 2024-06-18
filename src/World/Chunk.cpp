@@ -84,8 +84,8 @@ namespace mc
 			{
 				int max_height = glm::clamp((int)(perlin.octave2D_01((x + (float)m_position.x * CHUNK_SIZE) * 0.0045f, (z + (float)m_position.y * CHUNK_SIZE) * 0.0045f, 4, 0.7f) * MAX_HEIGHT), MIN_HEIGHT, MAX_HEIGHT);
 				m_top_blocks[z * CHUNK_SIZE + x] = max_height;
-				int stone_height = max_height - 3;
-				for (int y = 0; y <= 255; y++)
+        int check_height = max_height < OCEAN_LEVEL ? OCEAN_LEVEL : max_height;
+				for (int y = 0; y <= check_height; y++)
 				{
 					BlockID block = BlockID::Air;
           if (y > MOUNTAIN_HEIGHT && y <= max_height)
@@ -95,7 +95,7 @@ namespace mc
             else
 						  block = BlockID::Stone;
           }
-          else if (y < stone_height)
+          else if (y < max_height - 3)
 						block = BlockID::Stone;
 					else if (y < max_height)
 						block = BlockID::Dirt;

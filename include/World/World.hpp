@@ -5,7 +5,7 @@
 
 #include "../Camera.hpp"
 #include "../Renderer/Renderer.hpp"
-#include "../Renderer/TextureAtlas.hpp"
+#include "../Renderer/Texture.hpp"
 #include "Chunk.hpp"
 #include "ChunkMesh.hpp"
 #include "ChunkMap.hpp"
@@ -40,7 +40,7 @@ namespace mc
 
 		std::thread m_update_thread;
 
-		const int RENDER_DISTANCE = 5;
+		const int RENDER_DISTANCE = 10;
 		const float CHUNK_UPDATE_MOVE_THRESHOLD = 20.0f;
 		glm::vec3 m_old_position;
 	};
