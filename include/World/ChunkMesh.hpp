@@ -2,10 +2,9 @@
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
-#include <vector>
 
-#include "../Renderer/Mesh.hpp"
-#include "BlockDatabase.hpp"
+#include "Renderer/Mesh.hpp"
+#include "World/Block.hpp"
 
 namespace mc
 {

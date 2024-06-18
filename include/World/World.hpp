@@ -3,9 +3,9 @@
 #include <glm/glm.hpp>
 #include <thread>
 
-#include "../Camera.hpp"
-#include "../Renderer/Renderer.hpp"
-#include "../Renderer/Texture.hpp"
+#include "Camera.hpp"
+#include "Renderer/Renderer.hpp"
+#include "Renderer/Texture.hpp"
 #include "Chunk.hpp"
 #include "ChunkMap.hpp"
 #include "ChunkMesh.hpp"

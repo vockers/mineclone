@@ -1,6 +1,5 @@
 #include "GUI/HUD.hpp"
 
-#include <iomanip>
 #include <iostream>
 
 namespace mc

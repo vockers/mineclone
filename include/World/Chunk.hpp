@@ -4,7 +4,6 @@
 #include <memory>
 #include <vector>
 
-#include "World/BlockDatabase.hpp"
 #include "World/ChunkMesh.hpp"
 #include "World/ChunkSection.hpp"
 

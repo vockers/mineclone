@@ -1,7 +1,6 @@
 #include "World/Chunk.hpp"
 
 #include <glm/glm.hpp>
-#include <iostream>
 
 #include "Utils/PerlinNoise.hpp"
 #include "World/ChunkMap.hpp"

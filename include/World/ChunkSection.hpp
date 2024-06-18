@@ -1,6 +1,6 @@
 #pragma once
 
-#include "World/BlockDatabase.hpp"
+#include "World/Block.hpp"
 
 constexpr int CHUNK_SIZE = 32;
 constexpr int CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE;

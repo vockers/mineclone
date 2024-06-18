@@ -1,5 +1,6 @@
 #include "World/ChunkMesh.hpp"
 
+#include "World/BlockDatabase.hpp"
 #include "World/Chunk.hpp"
 
 // FBLRTB
