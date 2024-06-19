@@ -4,11 +4,12 @@
 #include <thread>
 
 #include "Camera.hpp"
-#include "Renderer/Renderer.hpp"
-#include "Renderer/Texture.hpp"
 #include "Chunk.hpp"
 #include "ChunkMap.hpp"
 #include "ChunkMesh.hpp"
+#include "Renderer/Renderer.hpp"
+#include "Renderer/Texture.hpp"
+#include "World/WorldGenerator.hpp"
 
 namespace mc
 {
@@ -36,6 +37,7 @@ class World
     Shader m_chunk_shader;
     ChunkMap m_chunks;
     ChunksVisitedMap m_chunks_visited;
+    WorldGenerator m_generator;
 
     std::thread m_update_thread;
 

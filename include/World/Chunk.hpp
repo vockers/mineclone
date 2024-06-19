@@ -25,12 +25,14 @@ class Chunk
     BlockID getBlock(int x, int y, int z) const;
     BlockID getBlock(const glm::ivec3 &pos) const;
     void setBlock(int x, int y, int z, BlockID block);
+    void setTopBlock(int x, int z, int height) { m_top_blocks[z * CHUNK_SIZE + x] = height; }
 
+    int getTopBlock(int x, int z) const;
     ChunkMesh *getMesh() const { return m_mesh.get(); }
     glm::ivec2 getPosition() const { return m_position; }
-    glm::vec3 getWorldPosition() const
+    glm::ivec2 getWorldPosition() const
     {
-        return glm::vec3(m_position.x * CHUNK_SIZE, 0, m_position.y * CHUNK_SIZE);
+        return glm::ivec2(m_position.x * CHUNK_SIZE, m_position.y * CHUNK_SIZE);
     }
     int getSectionCount() const { return m_sections.size(); }
 
@@ -41,10 +43,8 @@ class Chunk
     World &m_world;
     ChunkMap &m_map;
 
-    int getTopBlock(int x, int z) const;
     bool checkBounds(int x, int y, int z) const;
     void generateTerrain();
-    void generateDecorations();
     void generateTree(int x, int y, int z);
     void addSections(size_t index);
     const ChunkSection &getSection(size_t index) const;

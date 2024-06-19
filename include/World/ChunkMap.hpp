@@ -28,8 +28,11 @@ class ChunkMap
   public:
     ChunkMap(World &world);
 
+    Chunk& operator[](const glm::ivec2 &position) { return *m_chunks[position]; }
+
     void addChunk(const glm::ivec2 &position);
 
+    bool contains(const glm::ivec2 &position) const { return m_chunks.find(position) != m_chunks.end(); }
     const ChunkHashMap &getChunks() const { return m_chunks; };
 
   private:
