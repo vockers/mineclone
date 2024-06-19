@@ -1,11 +1,14 @@
 #pragma once
 
+#include "World/Block.hpp"
+
 namespace mc
 {
-class TerrainGenerator
+class WorldGenerator
 {
   public:
     static int getHeight(int x, int z);
+    static BlockID getBlock(int x, int y, int z, int max_height);
 
     static const int OCEAN_LEVEL = 12;
     static const int MIN_HEIGHT = 2;
