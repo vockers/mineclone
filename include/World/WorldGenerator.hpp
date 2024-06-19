@@ -10,6 +10,7 @@ class WorldGenerator
     static int getHeight(int x, int z);
     static BlockID getBlock(int x, int y, int z, int max_height);
 
+    static const unsigned int SEED = 12345U;
     static const int OCEAN_LEVEL = 12;
     static const int MIN_HEIGHT = 2;
     static const int MAX_HEIGHT = 105;
