@@ -55,6 +55,10 @@ BlockDatabase::BlockDatabase()
         {{3, 13}, {3, 13}, {3, 13}, {3, 13}, {3, 13}, {3, 13}},
         BlockType::Solid,
         BlockMeshType::Default};
+    m_data[static_cast<int>(BlockID::Lava)] = {
+        {{0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}},
+        BlockType::Solid,
+        BlockMeshType::Default};
     m_data[static_cast<int>(BlockID::Dirt)] = {
         {{2, 15}, {2, 15}, {2, 15}, {2, 15}, {2, 15}, {2, 15}},
         BlockType::Solid,

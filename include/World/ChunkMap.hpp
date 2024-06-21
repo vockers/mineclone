@@ -28,11 +28,15 @@ class ChunkMap
   public:
     ChunkMap(World &world);
 
-    Chunk& operator[](const glm::ivec2 &position) { return *m_chunks[position]; }
+    Chunk &operator[](const glm::ivec2 &position) { return *m_chunks[position]; }
 
     void addChunk(const glm::ivec2 &position);
+    void setBlock(Chunk &chunk, int x, int y, int z, BlockID block_id);
 
-    bool contains(const glm::ivec2 &position) const { return m_chunks.find(position) != m_chunks.end(); }
+    bool contains(const glm::ivec2 &position) const
+    {
+        return m_chunks.find(position) != m_chunks.end();
+    }
     const ChunkHashMap &getChunks() const { return m_chunks; };
 
   private:

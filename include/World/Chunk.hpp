@@ -39,6 +39,8 @@ class Chunk
     void generateMesh();
     void draw(ChunkMesh::Part part) const;
 
+    bool is_generated = false;
+
   private:
     World &m_world;
     ChunkMap &m_map;

@@ -37,6 +37,7 @@ enum class BlockID : unsigned char {
     Rose,
     YellowFlower,
     Snow,
+    Lava,
     Dirt,
 };
 

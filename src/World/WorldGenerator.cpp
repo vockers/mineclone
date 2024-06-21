@@ -1,22 +1,18 @@
 #include "World/WorldGenerator.hpp"
 
-#include "Utils/PerlinNoise.hpp"
-
 namespace mc
 {
 int WorldGenerator::getHeight(int x, int z)
 {
-    const static siv::PerlinNoise::seed_type seed = SEED;
-    const static siv::PerlinNoise perlin{seed};
-
-    return glm::clamp((int)(perlin.octave2D_01(x * 0.0045f, z * 0.0045f, 4, 0.7f) * MAX_HEIGHT),
+    float continentalness = m_perlin.octave2D_01(x * 0.0006f, z * 0.0006f, 4, 0.7f);
+    return glm::clamp((int)(m_perlin.octave2D_01(x * 0.004f, z * 0.004f, 4, 0.7f) * MAX_HEIGHT * continentalness),
                       MIN_HEIGHT, MAX_HEIGHT);
 }
 
 BlockID WorldGenerator::getBlock(int x, int y, int z, int max_height)
 {
     BlockID block = BlockID::Air;
-    if (y > MOUNTAIN_HEIGHT && y <= max_height) {
+    if (y > MOUNTAIN_HEIGHT && y <= max_height){
         if (y == max_height && y >= SNOW_HEIGHT)
             block = BlockID::Snow;
         else
@@ -36,10 +32,10 @@ BlockID WorldGenerator::getBlock(int x, int y, int z, int max_height)
     return block;
 }
 
-void WorldGenerator::generate(Chunk &chunk)
+void WorldGenerator::generate(ChunkMap &chunks, Chunk &chunk)
 {
     generateTerrain(chunk);
-    generateDecorations(chunk);
+    generateDecorations(chunks, chunk);
 }
 
 void WorldGenerator::generateTerrain(Chunk &chunk)
@@ -59,14 +55,15 @@ void WorldGenerator::generateTerrain(Chunk &chunk)
     }
 }
 
-void WorldGenerator::generateDecorations(Chunk &chunk)
+void WorldGenerator::generateDecorations(ChunkMap &chunks, Chunk &chunk)
 {
     for (int z = 0; z < CHUNK_SIZE; z++) {
         for (int x = 0; x < CHUNK_SIZE; x++) {
             int max_height = chunk.getTopBlock(x, z);
+            // Only generates trees above ocean level and below mountain height
             if (max_height > OCEAN_LEVEL + 2 && max_height < MOUNTAIN_HEIGHT) {
                 if (rand() % 125 > 123)
-                    generateTree(chunk, x, max_height + 1, z);
+                    generateTree(chunks, chunk, x, max_height + 1, z);
                 else if (rand() % 100 > 90)
                     chunk.setBlock(x, max_height + 1, z, BlockID::TallGrass);
                 else if (rand() % 100 > 97) {
@@ -80,9 +77,8 @@ void WorldGenerator::generateDecorations(Chunk &chunk)
     }
 }
 
-void WorldGenerator::generateTree(Chunk &chunk, int x, int y, int z)
+void WorldGenerator::generateTree(ChunkMap& chunks, Chunk &chunk, int x, int y, int z)
 {
-    chunk.setBlock(x, y, z, BlockID::Wood);
     int height = (rand() % 3) + 3;
 
     for (int i = 0; i < height; i++) {
@@ -100,7 +96,7 @@ void WorldGenerator::generateTree(Chunk &chunk, int x, int y, int z)
 
                 if ((!(xx == x && zz == z) || yy > (y + height)) &&
                     !(corner && yy == (y + height + 1) && rand() % 100 > 40))
-                    chunk.setBlock(xx, yy, zz, BlockID::Leaves);
+                    chunks.setBlock(chunk, xx, yy, zz, BlockID::Leaves);
             }
         }
     }
@@ -114,7 +110,7 @@ void WorldGenerator::generateTree(Chunk &chunk, int x, int y, int z)
                 bool corner = c == 2;
 
                 if (!(corner && yy == (y + height + leave_height) && rand() % 100 > 20))
-                    chunk.setBlock(xx, yy, zz, BlockID::Leaves);
+                    chunks.setBlock(chunk, xx, yy, zz, BlockID::Leaves);
             }
         }
     }
