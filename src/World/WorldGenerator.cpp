@@ -4,16 +4,19 @@ namespace mc
 {
 int WorldGenerator::getHeight(int x, int z)
 {
-    float continentalness = m_perlin.octave2D_01(x * 0.0006f, z * 0.0006f, 4, 0.7f);
-    return glm::clamp((int)(m_perlin.octave2D_01(x * 0.004f, z * 0.004f, 4, 0.7f) * MAX_HEIGHT * continentalness),
-                      MIN_HEIGHT, MAX_HEIGHT);
+    float continentalness = m_perlin.octave2D_01(x * 0.0009f, z * 0.0009f, 4, 0.7f);
+    return glm::clamp(
+        (int)(m_perlin.octave2D_01(x * 0.004f, z * 0.004f, 4, 0.7f) * MAX_HEIGHT * continentalness),
+        MIN_HEIGHT, MAX_HEIGHT);
 }
 
 BlockID WorldGenerator::getBlock(int x, int y, int z, int max_height)
 {
     BlockID block = BlockID::Air;
-    if (y > MOUNTAIN_HEIGHT && y <= max_height){
-        if (y == max_height && y >= SNOW_HEIGHT)
+    float blend = m_perlin.octave2D_01(x * 0.05f, z * 0.05f, 4, 0.09f) * 10.f;
+
+    if (y > MOUNTAIN_HEIGHT + blend && y <= max_height) {
+        if (y == max_height && y >= SNOW_HEIGHT - blend)
             block = BlockID::Snow;
         else
             block = BlockID::Stone;
@@ -77,7 +80,7 @@ void WorldGenerator::generateDecorations(ChunkMap &chunks, Chunk &chunk)
     }
 }
 
-void WorldGenerator::generateTree(ChunkMap& chunks, Chunk &chunk, int x, int y, int z)
+void WorldGenerator::generateTree(ChunkMap &chunks, Chunk &chunk, int x, int y, int z)
 {
     int height = (rand() % 3) + 3;
 
