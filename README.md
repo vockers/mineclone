@@ -15,11 +15,3 @@ cd mineclone
 make
 ./mineclone
 ```
-
-## TODO
-- **Infinite Height:** Implement support for generating world with infinite height.
-- **Frustum Culling:** Optimize rendering using frustum culling.
-- **World Serialization:** Save and load the game world to/from disk for persistence and saving RAM.
-- **Breaking/Placing Blocks:** Updating chunks after left/right clicking blocks
-- **Day-Night Cycle:** Implement a dynamic day-night cycle with block lighting data.
-- **Physics:** Player gravity and collision with the world.
