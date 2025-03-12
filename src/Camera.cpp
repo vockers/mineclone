@@ -4,6 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
+#include "Utils/PerlinNoise.hpp"
+
 namespace mc
 {
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
@@ -36,6 +38,7 @@ void Camera::updateVectors()
     m_front = glm::normalize(front);
     m_right = glm::normalize(glm::cross(m_front, glm::vec3(0.0f, 1.0f, 0.0f)));
     m_up = glm::normalize(glm::cross(m_right, m_front));
+
 }
 
 void Camera::processKeyboard(float delta_time, Input &input)

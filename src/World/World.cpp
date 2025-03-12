@@ -50,6 +50,11 @@ void World::generateChunks(const glm::ivec2 &start, glm::ivec2 current, int dist
     m_chunks_visited[current] = true;
 
     m_chunks.addChunk(current);
+    if (!m_chunks[current].is_generated) {
+        m_generator.generate(m_chunks, m_chunks[current]);
+        m_chunks[current].generateMesh();
+        m_chunks[current].is_generated = true;
+    }
 
     generateChunks(start, glm::ivec2(current.x + 1, current.y), distance);
     generateChunks(start, glm::ivec2(current.x - 1, current.y), distance);

@@ -4,11 +4,12 @@
 #include <thread>
 
 #include "Camera.hpp"
-#include "Renderer/Renderer.hpp"
-#include "Renderer/Texture.hpp"
 #include "Chunk.hpp"
 #include "ChunkMap.hpp"
 #include "ChunkMesh.hpp"
+#include "Renderer/Renderer.hpp"
+#include "Renderer/Texture.hpp"
+#include "World/WorldGenerator.hpp"
 
 namespace mc
 {
@@ -26,8 +27,6 @@ class World
     std::thread &getUpdateThread() { return m_update_thread; }
     const Shader &getChunkShader() const { return m_chunk_shader; }
 
-    static const unsigned int SEED = 12345U;
-
   private:
     void renderChunks(ChunkMesh::Part part);
 
@@ -38,10 +37,11 @@ class World
     Shader m_chunk_shader;
     ChunkMap m_chunks;
     ChunksVisitedMap m_chunks_visited;
+    WorldGenerator m_generator;
 
     std::thread m_update_thread;
 
-    const int RENDER_DISTANCE = 10;
+    const int RENDER_DISTANCE = 15;
     const float CHUNK_UPDATE_MOVE_THRESHOLD = 20.0f;
     glm::vec3 m_old_position;
 };
